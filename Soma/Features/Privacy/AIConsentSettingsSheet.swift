@@ -34,7 +34,7 @@ struct AIConsentSettingsSheet: View {
 
                     statusCard
 
-                    Text("with this on, the text of a meal you log goes to Claude — an AI model made by Anthropic — to be parsed, and once a night a compact summary of your recent meals, check-ins and daily health totals goes over so soma can look for patterns. no name, no email, no account id, no raw health samples, no audio.")
+                    Text("with this on, the text of a meal you log goes to Claude — an AI model made by Anthropic — to be parsed, and once a night a compact summary of your recent meals, check-ins and daily health totals goes over so Noticed can look for patterns. no name, no email, no account id, no raw health samples, no audio.")
                         .font(Font.Soma.dishNote)
                         .foregroundStyle(Color.ink)
                         .lineSpacing(3)
@@ -82,7 +82,7 @@ struct AIConsentSettingsSheet: View {
                         )
                 )
             Text(disclosure.hasConsented
-                 ? "soma sends meals to Claude to be read."
+                 ? "Noticed sends meals to Claude to be read."
                  : "nothing goes to Claude.")
                 .font(Font.Soma.dishNote)
                 .foregroundStyle(Color.ink)

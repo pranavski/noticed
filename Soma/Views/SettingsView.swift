@@ -188,7 +188,7 @@ private struct ContentsList: View {
             Entry(title: "Export",        note: "your data, plainly",     glyph: .knife,  action: actions.onExport),
             Entry(title: "Privacy",       note: "what leaves your phone", glyph: .leaf,   action: actions.onPrivacy),
             Entry(title: "Send feedback", note: "tell us what could be better", glyph: .cherry, action: actions.onFeedback),
-            Entry(title: "About",         note: "what soma is, isn't",    glyph: .bowl,   action: actions.onAbout),
+            Entry(title: "About",         note: "what Noticed is, isn't",    glyph: .bowl,   action: actions.onAbout),
             Entry(title: "Sign out",      note: "close the kitchen",      glyph: .knife,  action: actions.onSignOut),
             Entry(title: "Delete account", note: "erase everything, forever", glyph: .knife, action: actions.onDeleteAccount)
         ]
@@ -268,14 +268,14 @@ private struct Footer: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
             InkRule(style: .wavy, color: Color.rule, weight: 1.0)
                 .frame(width: 120)
-            Text("soma remembers gently.\nnever shames. never prescribes.")
+            Text("Noticed remembers gently.\nnever shames. never prescribes.")
                 .font(Font.Soma.dishNote)
                 .foregroundStyle(Color.inkSoft)
                 .lineSpacing(3)
 
             // Legal / safety line. Required visible somewhere the user can
             // reasonably reach — Settings footer is the calmest home for it.
-            Text("not medical advice. soma surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
+            Text("not medical advice. Noticed surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
                 .font(Font.Soma.margin)
                 .foregroundStyle(Color.inkSoft.opacity(0.85))
                 .lineSpacing(2)

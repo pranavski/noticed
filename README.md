@@ -1,16 +1,23 @@
-# Soma
+# Noticed
 
-A food–body record for people who cook. Log a meal in about ten seconds
-(speak it, type it, or tap a recent dish), optionally connect Apple Health,
-and a nightly statistics engine looks for honest, hedged patterns between
-what you ate and how your body responded. Not a diet app: no goals, no
-streaks, no calorie targets, never medical advice.
+A food–body record for people who suspect something they eat is affecting
+how they feel. Log a meal in about ten seconds (speak it, type it, or tap a
+recent dish), optionally connect Apple Health, and a nightly statistics
+engine looks for honest, hedged patterns between what you ate and how your
+body responded. Not a diet app: no goals, no streaks, no calorie targets,
+never medical advice.
+
+The app ships as **Noticed**; the repo, directories and Swift types still say
+`Soma` on purpose — see
+`docs/decisions/2026-09-10-positioning-and-pricing.md`.
 
 - `Soma/` — SwiftUI app, iOS 17+, iPhone only. MVVM, async/await.
 - `supabase/` — Postgres migrations and Deno Edge Functions
   (`parse-meal`, `generate-insights`, `submit-correction`, `delete-account`).
 - `docs/` — the MVP spec, privacy policy, App Store compliance map and
   deployment checklist. Read `docs/food-body-record-mvp-spec.md` first.
+- `docs/decisions/` — dated records of product decisions whose reasoning
+  isn't recoverable from the diffs.
 - `.claude/skills/` — the design system, Supabase workflow and insight
   rules, as skills for Claude Code.
 

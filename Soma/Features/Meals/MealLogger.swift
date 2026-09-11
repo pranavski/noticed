@@ -62,7 +62,7 @@ struct MealLogger {
             await onInserted()
             return Receipt(
                 mealId: mealId,
-                note: "filed as written — soma won't send it to Claude until you say it's ok, see the kitchen. press and hold the card to fill in the details.",
+                note: "filed as written — Noticed won't send it to Claude until you say it's ok, see the kitchen. press and hold the card to fill in the details.",
                 parseAttempted: false
             )
         }

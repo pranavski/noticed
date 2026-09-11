@@ -122,7 +122,7 @@ struct AIDisclosureSheet: View {
                         .tracking(3)
                         .foregroundStyle(Color.persimmon)
 
-                    Text("soma reads your meal with help from Claude.")
+                    Text("Noticed reads your meal with help from Claude.")
                         .font(Font.Soma.pullQuote)
                         .foregroundStyle(Color.ink)
                         .lineSpacing(2)
@@ -134,7 +134,7 @@ struct AIDisclosureSheet: View {
                         .lineSpacing(3)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Text("and once a night, if there's enough to go on, soma sends Claude a compact summary of your last few weeks — meals, energy check-ins, and the daily Apple Health numbers you've connected — to look for patterns worth mentioning. never the raw health samples; those stay on your phone.")
+                    Text("and once a night, if there's enough to go on, Noticed sends Claude a compact summary of your last few weeks — meals, energy check-ins, and the daily Apple Health numbers you've connected — to look for patterns worth mentioning. never the raw health samples; those stay on your phone.")
                         .font(Font.Soma.dishNote)
                         .foregroundStyle(Color.ink)
                         .lineSpacing(3)
