@@ -40,7 +40,7 @@ import {
 import { matchAnchors, matchFdcEntries, renderAnchors } from "./fdc.ts";
 import { detectVenues, renderVenueContext } from "./venue.ts";
 
-const ANTHROPIC_MODEL = "claude-sonnet-4-6";
+const ANTHROPIC_MODEL = "claude-sonnet-5";
 
 const CLAUDE_TIMEOUT_MS = 20_000;
 
@@ -449,15 +449,30 @@ async function callClaude(
   const payload = await postMessages(apiKey, {
     model: ANTHROPIC_MODEL,
     max_tokens: 1024,
-    // The system prompt is ~5k characters and byte-identical on every
-    // call, so it is marked as a cache prefix: after the first parse in a
-    // five-minute window every further parse reads it from cache instead
-    // of paying for it again. Everything that varies per call — the
-    // user's corrections, community aliases, anchors, the transcript —
-    // sits in the user message, after the breakpoint, where it belongs.
-    // Sonnet 4.6 caches prefixes of 1024 tokens or more; if this prompt
-    // is ever trimmed below that, caching silently stops (check
-    // usage.cache_read_input_tokens in the function logs).
+    // The system prompt is ~6.5k characters (~1,630 tokens) and
+    // byte-identical on every call, so it is marked as a cache prefix.
+    // Everything that varies per call — the user's corrections, community
+    // aliases, anchors, the transcript — sits in the user message, after
+    // the breakpoint, where it belongs. Sonnet 5 caches prefixes of 1024
+    // tokens or more; if this prompt is ever trimmed below that, caching
+    // silently stops (check usage.cache_read_input_tokens in the logs).
+    //
+    // Whether this SAVES anything depends on traffic, and at launch it
+    // does not. The cache is keyed on the prefix and scoped to the API
+    // key, so every Soma user shares one entry — but a 5-minute TTL means
+    // it only stays warm while parses arrive less than five minutes
+    // apart. Below that rate each parse is a cold write at 1.25x input
+    // price, i.e. ~25% MORE than not caching at all (~$0.001 per meal).
+    // Above it nearly every parse is a read at 0.1x. Meals cluster at
+    // breakfast/lunch/dinner and stop overnight, so the crossover is
+    // somewhere in the low hundreds of daily-active users rather than the
+    // ~96 a flat 3-meals-a-day rate would suggest.
+    //
+    // It is left on deliberately: the loss below the crossover is
+    // fractions of a cent per meal, the win above it is ~90% of the input
+    // side, and it flips on its own with no deploy. Do not read the
+    // breakpoint as a live saving until the logs show
+    // cache_read_input_tokens routinely non-zero.
     system: [
       { type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } },
     ],
