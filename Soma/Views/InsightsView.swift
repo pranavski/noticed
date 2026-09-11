@@ -14,6 +14,7 @@ import SwiftUI
 /// and nothing here ever prescribes.
 struct InsightsView: View {
     @StateObject private var vm = InsightsViewModel()
+    @EnvironmentObject private var subscriptions: SubscriptionStore
 
     var body: some View {
         ZStack {
@@ -92,7 +93,19 @@ struct InsightsView: View {
                 }
             }
             .task { await vm.load() }
-            .refreshable { await vm.refresh() }
+            // While the entitlement is still being read, let the request
+            // through rather than showing a subscriber the paywall on launch.
+            .refreshable {
+                await vm.refresh(
+                    canGenerate: subscriptions.isLoading
+                        || subscriptions.state.canGenerateInsights
+                )
+            }
+            .sheet(isPresented: $vm.needsSubscription) {
+                SubscribeSheet()
+                    .environmentObject(subscriptions)
+                    .presentationDetents([.large])
+            }
             // Same family as SOMA_PREVIEW_TAB in RootView: lets headless
             // simulator runs land on a given anchor for screenshots.
             .onAppear {

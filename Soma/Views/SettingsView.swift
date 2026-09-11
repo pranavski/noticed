@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var session: SessionStore
     @EnvironmentObject private var disclosure: AIDisclosure
+    @EnvironmentObject private var subscriptions: SubscriptionStore
 
     @State private var showHealthKit = false
     @State private var showAbout = false
@@ -11,6 +12,15 @@ struct SettingsView: View {
     @State private var showDeleteAccount = false
     @State private var showPrivacy = false
     @State private var showAIConsent = false
+    @State private var showSubscribe = {
+        #if DEBUG
+        // Same family as TodayView's SOMA_PREVIEW_SHEET: a headless run can
+        // open the paywall for a screenshot without tapping through.
+        return ProcessInfo.processInfo.environment["SOMA_PREVIEW_SHEET"] == "subscribe"
+        #else
+        return false
+        #endif
+    }()
     @State private var exportURL: URL?
     @State private var isExporting = false
     @State private var exportError: String?
@@ -80,6 +90,12 @@ struct SettingsView: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
+        .sheet(isPresented: $showSubscribe) {
+            SubscribeSheet()
+                .environmentObject(subscriptions)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        }
         .sheet(item: Binding(
             get: { exportURL.map(ExportItem.init) },
             set: { newValue in exportURL = newValue?.url }
@@ -93,6 +109,8 @@ struct SettingsView: View {
             onHealthKit:    { showHealthKit = true },
             healthKitNote:  healthKitNote,
             onCheckin:      { showCheckin = true },
+            onSubscription: { showSubscribe = true },
+            subscriptionNote: subscriptionNote,
             onAIConsent:    { showAIConsent = true },
             aiConsentNote:  disclosure.hasConsented
                             ? "Claude reads your meals · on"
@@ -104,6 +122,20 @@ struct SettingsView: View {
             onDeleteAccount:{ showDeleteAccount = true },
             onSignOut:      { Task { await session.signOut() } }
         )
+    }
+
+    /// Says where the subscription actually stands, in the app's own terms
+    /// rather than the App Store's. A lapsed reader is told what still
+    /// works, not what they have lost.
+    private var subscriptionNote: String {
+        switch subscriptions.state {
+        case .free:
+            return "off · the notebook still works"
+        case .trial:
+            return "on · in the first 14 days"
+        case .subscribed:
+            return "on · looking every night"
+        }
     }
 
     /// The row used to read "sleep, steps, energy" whether or not anything
@@ -157,6 +189,8 @@ private struct ContentsList: View {
         var onHealthKit: () -> Void
         var healthKitNote: String
         var onCheckin: () -> Void
+        var onSubscription: () -> Void
+        var subscriptionNote: String
         var onAIConsent: () -> Void
         var aiConsentNote: String
         var onExport: () -> Void
@@ -184,6 +218,7 @@ private struct ContentsList: View {
         [
             Entry(title: "HealthKit",     note: actions.healthKitNote,    glyph: .sprig,  action: actions.onHealthKit),
             Entry(title: "Check-in",      note: "today, or a day you missed", glyph: .cherry, action: actions.onCheckin),
+            Entry(title: "The nightly engine", note: actions.subscriptionNote, glyph: .sprig, action: actions.onSubscription),
             Entry(title: "Reading meals", note: actions.aiConsentNote,    glyph: .lemon,  action: actions.onAIConsent),
             Entry(title: "Export",        note: "your data, plainly",     glyph: .knife,  action: actions.onExport),
             Entry(title: "Privacy",       note: "what leaves your phone", glyph: .leaf,   action: actions.onPrivacy),

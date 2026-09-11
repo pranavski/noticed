@@ -117,11 +117,26 @@ final class InsightsViewModel: ObservableObject {
         isLoading = false
     }
 
+    /// Set when a pull-to-refresh was declined for want of a subscription.
+    /// The view turns this into the paywall; the view model does not present
+    /// anything itself.
+    @Published var needsSubscription = false
+
     /// Pull-to-refresh: ask the engine to think, then re-read the feed.
     /// A generation failure is soft — whatever is already surfaced stays.
-    func refresh() async {
+    ///
+    /// `canGenerate` is the entitlement, passed in rather than read here so
+    /// the view model stays testable without StoreKit. Re-reading the feed
+    /// still happens for a free reader: their existing findings, reflections
+    /// and coverage are all theirs, and only the request to think is gated.
+    func refresh(canGenerate: Bool = true) async {
         guard !Self.isPreview else { return }
         errorText = nil
+        guard canGenerate else {
+            await load()
+            needsSubscription = true
+            return
+        }
         isGenerating = true
         var generationError: Error?
         do {

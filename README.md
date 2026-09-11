@@ -56,7 +56,7 @@ items in `docs/app-store-compliance.md` §6.
 ## Screenshot mode
 
 Debug builds honour `SOMA_PREVIEW=1` (skip sign-in, load sample data),
-`SOMA_PREVIEW_TAB`, `SOMA_PREVIEW_SHEET=capture|checkin`,
+`SOMA_PREVIEW_TAB`, `SOMA_PREVIEW_SHEET=capture|checkin|subscribe`,
 `SOMA_PREVIEW_COMPARE=1` (wax paper down), `SOMA_PREVIEW_SCROLL` and
 `SOMA_PREVIEW_EMPTY=1` as environment variables
 on the simulator run. All of it compiles out of Release.

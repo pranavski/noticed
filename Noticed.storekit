@@ -1,0 +1,52 @@
+{
+  "identifier" : "A1F2C3D4-5E6F-4A7B-8C9D-0E1F2A3B4C5D",
+  "nonRenewingSubscriptions" : [],
+  "products" : [],
+  "settings" : {
+    "_applicationInternalID" : "",
+    "_developerTeamID" : "8VZH2497GC",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 0,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : []
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21563421",
+      "localizations" : [],
+      "name" : "Noticed",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [],
+          "codeOffers" : [],
+          "displayPrice" : "15.00",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6471120901",
+          "introductoryOffer" : {
+            "internalID" : "8812740301",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P2W"
+          },
+          "localizations" : [
+            {
+              "description" : "The nightly engine. Your notebook, record, export and daily reflections stay free.",
+              "displayName" : "Noticed, yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "com.pranavsurampudi.noticed.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Noticed yearly",
+          "subscriptionGroupID" : "21563421",
+          "type" : "RecurringSubscription"
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}
