@@ -162,3 +162,54 @@ Dashboard → Authentication → Providers → Apple:
      -H "Authorization: Bearer $INSIGHTS_CRON_SECRET" \
      -H "Content-Type: application/json" -d '{"user_id":"<uuid>"}'
    ```
+
+## 9. Subscription (StoreKit)
+
+The client half is built: `SubscriptionStore` (entitlement), `SubscribeSheet`
+(paywall), the "The nightly engine" row in the kitchen, and the gate on
+pull-to-refresh. `Noticed.storekit` is referenced by the shared scheme, so a
+**Xcode** run sells the product locally — a `simctl launch` does not read the
+scheme, so the paywall there shows "—" and a disabled button, which is the
+intended offline fallback rather than a bug.
+
+What is not built, in the order it has to happen:
+
+1. **App Store Connect** — create the auto-renewable subscription. Product ID
+   `com.pranavsurampudi.noticed.yearly`, one subscription group, $15/year,
+   with a **2-week free-trial introductory offer**. These three values are
+   asserted by `SubscriptionStateTests.testProductIDMatchesTheStoreKitConfiguration`
+   against `Noticed.storekit`; ASC has to agree with both or the paywall is
+   empty in production with no error.
+
+   The trial is 14 days and not 7 on purpose: the insight gate needs seven
+   days *on which a meal was logged*, which a realistic user reaches around
+   calendar day 9–12. A 7-day trial bills people the day before their first
+   finding. See `docs/decisions/2026-09-10-positioning-and-pricing.md` §2.
+
+2. **Paid Applications agreement + banking.** Products stay in "Missing
+   Metadata"/"Waiting for Review" and never load until this is signed.
+
+3. **Server-side entitlement — the gate that actually matters.**
+   `SubscriptionStore` decides what the *app* offers. It does not and cannot
+   decide what the *server* does: `parse-meal` and `generate-insights` cost
+   real money per call and are reachable by anyone holding a valid JWT, so a
+   client-only check is a UI affordance, not a gate.
+
+   Do it the same way `ai_consent` is done — a row the Edge Functions read
+   before spending a model call — and write that row from **App Store Server
+   Notifications V2**, not from the client. A client-written entitlement row
+   is a client-written entitlement row no matter how it is phrased; it can be
+   forged with a single PostgREST call, and the RLS policy that lets the
+   owner write it is the hole.
+
+   Until this exists, the nightly cron fans out to every consenting user
+   regardless of subscription. That is *safe* (it costs money, it does not
+   leak anything) but it means the subscription is not yet enforced. Do not
+   describe the app as subscription-gated in App Store Connect review notes
+   before this lands.
+
+4. **Device test matrix**: buy with a sandbox Apple ID; confirm the trial
+   shows "14 days free first" on a fresh sandbox account and does *not* on
+   one that has already used it; cancel in sandbox and confirm the app falls
+   back to the free tier with meals, export, reflections and existing
+   findings all intact; restore on a second device.

@@ -41,14 +41,24 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       404 as the privacy policy. Rename the repo, confirm the new Pages URL
       resolves, then change the constant and the App Store Connect field
       together.
-- [ ] **StoreKit subscription** — $15/yr, 14-day trial, per §2 of the
-      decision record. Not started. Needs the product created in App Store
-      Connect first. Server-side entitlement check belongs alongside the
-      existing `ai_consent` gate, since `parse-meal` costs money per call and
-      a client-only check is not a gate.
-- [ ] **Free-tier gating** — on lapse: logging and export stay, reflections
-      stay live, existing insights freeze, new insights stop (§3). The
-      declined-consent path already does most of this.
+- [x] **StoreKit subscription, client half.** `SubscriptionStore`,
+      `SubscribeSheet`, the kitchen row, the pull-to-refresh gate and
+      `Noticed.storekit` (wired into the shared scheme, so an Xcode run
+      sells it locally). `SubscriptionStateTests` pins the product id, the
+      P2W trial and the P1Y period against the config file.
+- [x] **Free-tier gating.** Logging, record, export, reflections and
+      already-surfaced findings are free forever and asserted as such in
+      `SubscriptionStateTests`; only generation is gated.
+- [ ] **App Store Connect: create the subscription product** —
+      `com.pranavsurampudi.noticed.yearly`, $15/yr, 2-week free trial, and
+      sign the Paid Applications agreement. Until then the paywall is empty
+      in production. Steps in `docs/deployment-checklist.md` §9.
+- [ ] **Server-side entitlement via App Store Server Notifications V2.**
+      The client gate is UI only — the Edge Functions spend money and are
+      reachable with any valid JWT. Must be a row the functions read, written
+      by Apple's notifications, NOT by the client. Until it lands the
+      subscription is not actually enforced; don't call the app
+      subscription-gated in review notes. `docs/deployment-checklist.md` §9.3.
 
 ## Before the next TestFlight build
 
