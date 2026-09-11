@@ -21,6 +21,16 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       (`InsightCoverage`, `InsightCoverageTests`).
 - [x] App Store listing rewritten for the symptom cohort; new symptom-claim
       guardrail in `docs/app-store-compliance.md`.
+- [ ] **BLOCKING — re-point Sign in with Apple at the new bundle id.**
+      The native SIWA flow uses the bundle id AS the client id, so the
+      rename broke it in three places at once: the Apple App ID, the
+      Supabase Auth provider's Client ID, and the `APPLE_CLIENT_ID` secret
+      (set 2026-09-08, still says `.soma`). Sign-in fails and deletion stops
+      revoking until all three say `com.pranavsurampudi.noticed`. Full steps
+      in `docs/deployment-checklist.md` §5. Fold this into the outstanding
+      `.p8` key task below — the key must be created against the new App ID,
+      so doing them separately means making the key twice. A simulator
+      `SOMA_PREVIEW=1` run will NOT catch this.
 - [ ] **Trademark and domain check on "Noticed"** — the App Store search
       check came back clean (1 near-match) but neither of these was run.
       Do this before anything is filed under the name.

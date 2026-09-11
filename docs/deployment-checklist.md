@@ -38,8 +38,8 @@ supabase secrets set INSIGHTS_CRON_SECRET=$(openssl rand -hex 32)
 
 # SIWA token revocation (delete-account). All four required or the
 # function silently skips revocation:
-# Set 2026-09-08:
-#   supabase secrets set APPLE_CLIENT_ID=com.pranavsurampudi.soma
+# Set 2026-09-08 — APPLE_CLIENT_ID IS NOW STALE, see the warning below:
+#   supabase secrets set APPLE_CLIENT_ID=com.pranavsurampudi.noticed
 #   supabase secrets set APPLE_TEAM_ID=8VZH2497GC
 # Still needed — the .p8 does not exist until you create it:
 supabase secrets set APPLE_KEY_ID=<key id of the .p8 SIWA key>
@@ -85,8 +85,26 @@ last 30 days; migration `20260720120200`).
 
 ## 5. Supabase Auth — Apple provider
 
+> **BLOCKING after the 2026-09-10 rename.** The bundle id moved from
+> `com.pranavsurampudi.soma` to `com.pranavsurampudi.noticed`, and for the
+> native Sign in with Apple flow **the bundle id is the client id**. Until
+> all three of the following agree, sign-in fails outright and account
+> deletion silently stops revoking Apple tokens:
+>
+> 1. **Apple Developer portal** — an App ID for `com.pranavsurampudi.noticed`
+>    with Sign in with Apple enabled. The existing `.soma` App ID cannot be
+>    renamed; create the new one, and create the SIWA key against it (this
+>    is the same `.p8` step still outstanding in TODO.md, so do both at once
+>    rather than making a key twice).
+> 2. **Supabase Auth provider** — Client ID below.
+> 3. **`APPLE_CLIENT_ID` secret** — re-set for `delete-account`; the value
+>    set on 2026-09-08 still says `.soma`.
+>
+> Do this before any TestFlight build goes to a device. A simulator run
+> with `SOMA_PREVIEW=1` skips sign-in entirely and will not catch it.
+
 Dashboard → Authentication → Providers → Apple:
-- Client ID: `com.pranavsurampudi.soma` (the app bundle id — native flow).
+- Client ID: `com.pranavsurampudi.noticed` (the app bundle id — native flow).
 - No secret needed for the native `signInWithIdToken` flow.
 
 ## 6. App Store Connect
