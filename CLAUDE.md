@@ -1,4 +1,8 @@
-# Soma — Food–Body Record iOS App
+# Noticed (repo: soma) — Food–Body Record iOS App
+
+Ships as **Noticed**; the code, directories and Swift types still say Soma
+and deliberately stay that way (see
+`docs/decisions/2026-09-10-positioning-and-pricing.md` §5).
 
 ## What this is
 10-second meal logging for people who cook (voice / typing / one-tap
@@ -10,7 +14,7 @@ streaks-shaming, no calorie targets, never medical advice.
 ## Stack
 SwiftUI iOS 17+, MVVM, async/await. Supabase (Auth via Sign in with Apple,
 Postgres, private Storage, Edge Functions). Claude API called ONLY from
-Edge Functions — `claude-sonnet-4-6` for parse-meal, `claude-haiku-4-5`
+Edge Functions — `claude-sonnet-5` for parse-meal, `claude-haiku-4-5`
 for generate-insights (it selects and writes copy; it does no arithmetic).
 HealthKit read-only.
 
@@ -42,9 +46,14 @@ insight-rules (any insight engine work).
 - Ship-time constants (privacy URL, support email) live in
   `Soma/Core/SomaFeatures.swift`; `TODO.md` and `docs/deployment-checklist.md`
   are the live status lists — keep them current when finishing work.
+- Product decisions with non-obvious reasoning go in `docs/decisions/` as
+  dated records, not in commit messages.
 
 ## Hard rules
 - Calories are ALWAYS ranges in UI copy ("~550–700"), never bare numbers
+- A symptom may be named as the reader's question, NEVER as something the
+  app addresses ("find your trigger" is a medical claim; see
+  `docs/app-store-compliance.md`)
 - Insights are hedged ("worth watching, not a verdict"), gated by data
   coverage (meal-logging + body-signal days), never repeated, never
   prescriptive

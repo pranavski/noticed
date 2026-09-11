@@ -1,8 +1,44 @@
-# Soma — TODO
+# Noticed — TODO
 
 Live list. Everything the audit of 2026-09-07 called partially built or
 broken has been fixed in code; what remains is hosting, App Store Connect
 and deploy steps that need a human with credentials.
+
+Positioning, pricing and the rename were decided 2026-09-10 —
+`docs/decisions/2026-09-10-positioning-and-pricing.md`. The items that
+decision created are listed under "From the 2026-09-10 decisions" below.
+
+## From the 2026-09-10 decisions
+
+- [x] `parse-meal` on `claude-sonnet-5`. **Needs a redeploy**
+      (`supabase functions deploy parse-meal`) — the change is in the repo
+      only.
+- [x] Renamed to Noticed: display name, bundle ID
+      (`com.pranavsurampudi.noticed`), purpose strings, all user-visible
+      copy. Swift types, directories and storage keys deliberately unchanged.
+- [x] Empty state counts down to the gate instead of "a couple more weeks",
+      and distinguishes "not enough yet" from "looked, found nothing"
+      (`InsightCoverage`, `InsightCoverageTests`).
+- [x] App Store listing rewritten for the symptom cohort; new symptom-claim
+      guardrail in `docs/app-store-compliance.md`.
+- [ ] **Trademark and domain check on "Noticed"** — the App Store search
+      check came back clean (1 near-match) but neither of these was run.
+      Do this before anything is filed under the name.
+- [ ] **Rename the GitHub repo and move the Pages URL.**
+      `SomaFeatures.privacyPolicyURL` still points at
+      `pranavski.github.io/soma/privacy/` **on purpose** — it is live and
+      correct today, and repointing it before the repo moves would ship a
+      404 as the privacy policy. Rename the repo, confirm the new Pages URL
+      resolves, then change the constant and the App Store Connect field
+      together.
+- [ ] **StoreKit subscription** — $15/yr, 14-day trial, per §2 of the
+      decision record. Not started. Needs the product created in App Store
+      Connect first. Server-side entitlement check belongs alongside the
+      existing `ai_consent` gate, since `parse-meal` costs money per call and
+      a client-only check is not a gate.
+- [ ] **Free-tier gating** — on lapse: logging and export stay, reflections
+      stay live, existing insights freeze, new insights stop (§3). The
+      declined-consent path already does most of this.
 
 ## Before the next TestFlight build
 
@@ -17,12 +53,14 @@ Edge Functions deployed; GitHub Pages live; `privacyPolicyIsHosted` flipped.
       the Soma App ID. Until then deletion works but Apple is never told —
       `delete-account` now logs exactly that, so check the function logs
       after the first test deletion.
-- [ ] App Store Connect: privacy URL (https://pranavski.github.io/soma/privacy/),
-      support URL (https://pranavski.github.io/soma/), nutrition label, age
-      rating, review notes, screenshots — paste from
+- [ ] App Store Connect: privacy URL, support URL (both move with the repo
+      rename above — do not file them until the new Pages URL resolves),
+      nutrition label, age rating, review notes, screenshots — paste from
       docs/app-store-connect-copy.md; status in docs/app-store-compliance.md §6.
 - [ ] Seed a reviewer-visible insight with docs/reviewer-seed.sql, record a
       short video, attach it to the submission.
+- [ ] Re-shoot screenshots — the wordmark, the empty-state countdown and
+      several copy strings all changed with the rename.
 - [ ] Device smoke test, docs/deployment-checklist.md §8 — especially
       deletion (step 5) and the consent-decline path (step 7).
 

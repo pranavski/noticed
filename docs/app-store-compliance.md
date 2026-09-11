@@ -244,6 +244,32 @@ surface the app has under 1.4.1, and it is deliberately constrained:
   "clinically proven", "evidence-based nutrition", or name any journal.
   The citations are context for a personal observation, and marketing copy
   that inverts that framing is what would attract a 1.4.1 rejection
+- [ ] **ASC** — **A symptom may be named as the reader's question, never as
+  something the app addresses.** Added when the listing was repointed at
+  people who suspect food is affecting how they feel (see
+  `docs/decisions/2026-09-10-positioning-and-pricing.md`). The existing bans
+  cover imperatives and outcome claims and do not cover this: "find your
+  trigger", "identify what's causing your bloating", "get to the bottom of
+  your symptoms" contain no imperative and promise no outcome, yet each
+  asserts a diagnostic capability the app does not have and 1.4.1 reads as
+  a medical claim.
+
+  Allowed, because it describes what the reader already wonders and what
+  the app keeps: *"if you've wondered whether something you eat is
+  affecting how you sleep, Noticed keeps the record and tells you what
+  actually held up."*
+
+  Not allowed, because each promises resolution: *"find out what's
+  triggering your symptoms"*, *"discover your food sensitivities"*,
+  *"identify what's causing it"*, *"get answers about your gut"*.
+
+  The test to apply to any new sentence: does it name a symptom in the
+  position of something the app resolves? If the verb attached to the
+  symptom is the app's (find, identify, discover, diagnose, fix, solve,
+  reveal) rather than the reader's (wonder, suspect, notice, ask), rewrite
+  it. This governs the description, subtitle, promotional text, screenshot
+  captions and the support site equally. Keywords are exempt — a keyword is
+  a search token, not a sentence, and asserts nothing
 
 **Reviewer-facing summary, if asked:** Soma does not give nutrition advice.
 It finds statistical associations in a user's own food and body logs, and
