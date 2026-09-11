@@ -44,8 +44,12 @@ struct InsightsView: View {
                                 )
                                 .padding(.horizontal, Theme.Spacing.xl)
                             } else {
-                                EmptyFeedPage(note: vm.emptyStateNote)
-                                    .padding(.horizontal, Theme.Spacing.xl)
+                                EmptyFeedPage(
+                                    title: vm.emptyStateTitle,
+                                    note: vm.emptyStateNote,
+                                    isPastGate: vm.coverage?.isSufficient ?? false
+                                )
+                                .padding(.horizontal, Theme.Spacing.xl)
                             }
                         }
                     } else {
@@ -77,7 +81,7 @@ struct InsightsView: View {
                     // On the screen where the claims live, not only in the
                     // kitchen footer: once cards cite journals, the reader
                     // has to be told here what they are not.
-                    Text("not medical advice. soma surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
+                    Text("not medical advice. Noticed surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
                         .font(Font.Soma.margin)
                         .foregroundStyle(Color.inkSoft.opacity(0.85))
                         .lineSpacing(2)
@@ -123,7 +127,7 @@ private struct HeaderBlock: View {
                 .foregroundStyle(Color.inkSoft)
 
             HStack(spacing: 0) {
-                Text("Soma")
+                Text("Noticed")
                     .font(Font.Soma.logo)
                     .foregroundStyle(Color.ink)
                 Text(".")
@@ -443,7 +447,11 @@ private struct ReflectionRow: View {
 // MARK: - Empty state (honest, hedged, never shame)
 
 private struct EmptyFeedPage: View {
+    let title: String
     let note: String
+    /// Past the coverage gate the engine has run and found nothing. That is
+    /// a result, not a wait, and the footer must stop implying otherwise.
+    let isPastGate: Bool
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.l) {
@@ -451,14 +459,14 @@ private struct EmptyFeedPage: View {
                 Text("◷")
                     .font(Font.Soma.sectionTag)
                     .foregroundStyle(Color.inkSoft)
-                Text("NOTHING TO SURFACE YET")
+                Text(isPastGate ? "LOOKED, FOUND NOTHING" : "NOTHING TO SURFACE YET")
                     .font(Font.Soma.sectionTag)
                     .tracking(2)
                     .foregroundStyle(Color.inkSoft)
                 Spacer()
             }
 
-            Text("patterns need a little more to go on.")
+            Text(title)
                 .font(Font.Soma.pullQuote)
                 .foregroundStyle(Color.ink)
                 .lineSpacing(2)
@@ -470,7 +478,9 @@ private struct EmptyFeedPage: View {
                 .lineSpacing(2)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Text("keep logging — insights arrive quietly.")
+            Text(isPastGate
+                 ? "a quiet month is a real result."
+                 : "keep logging — insights arrive quietly.")
                 .font(Font.Soma.margin)
                 .foregroundStyle(Color.persimmon)
         }
