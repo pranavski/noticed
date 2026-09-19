@@ -195,21 +195,47 @@ What is not built, in the order it has to happen:
    real money per call and are reachable by anyone holding a valid JWT, so a
    client-only check is a UI affordance, not a gate.
 
-   Do it the same way `ai_consent` is done — a row the Edge Functions read
-   before spending a model call — and write that row from **App Store Server
-   Notifications V2**, not from the client. A client-written entitlement row
-   is a client-written entitlement row no matter how it is phrased; it can be
-   forged with a single PostgREST call, and the RLS policy that lets the
-   owner write it is the hole.
+   The design is decided in full — read
+   `docs/decisions/2026-09-19-subscription-enforcement.md` §5–§11 before
+   starting. In the order it has to be done, because the obvious order
+   bricks the app:
 
-   Until this exists, the nightly cron fans out to every consenting user
-   regardless of subscription. That is *safe* (it costs money, it does not
-   leak anything) but it means the subscription is not yet enforced. Do not
-   describe the app as subscription-gated in App Store Connect review notes
-   before this lands.
+   1. **`appAccountToken` in the first sellable build.** Set it to the
+      Supabase `user_id` in the purchase options in `SubscriptionStore`.
+      Apple echoes it in every notification; transactions bought without it
+      can never be joined to a user, and no later deploy repairs them. This
+      is the only irreversible item here.
+   2. **The entitlement table.** Shaped like `ai_consent` with one
+      inversion — the client gets an owner-can-**select** policy and no
+      write policy of any kind. The service role bypasses RLS, so the
+      webhook writes freely while the client cannot forge. Store
+      `environment` and honour both Sandbox and Production (every TestFlight
+      purchase is Sandbox; step 4 below is unrunnable otherwise).
+   3. **The ASSN V2 webhook** — an Edge Function that verifies the JWS
+      signature chain and upserts. Configure both the production and sandbox
+      notification URLs in App Store Connect. **Enable the 16-day grace
+      period** and treat billing retry as entitled.
+   4. **The reconciler** — an App Store Server API lookup, run on demand
+      when a user claims entitlement with no row, and as a periodic sweep.
+      Fail-closed enforcement is only safe because this exists; if it is
+      dropped, the fail-closed decision reopens.
+   5. **The checks, in shadow mode first.** The entitlement join on the cron
+      fan-out, the re-check inside `generate-insights`, and `parse-meal`'s
+      refusal (which writes `parse_status = 'manual'` and returns success —
+      never an error; see §9 of the decision record). Each logs the verdict
+      it *would* have enforced. Flip to enforcing only after real
+      notifications have been seen arriving for real subscribers.
+
+   Until step 5 is flipped the subscription is not enforced: the nightly
+   cron fans out to every consenting user regardless. That is *safe* (it
+   costs money, it leaks nothing) — but do not describe the app as
+   subscription-gated in App Store Connect review notes before the flip.
 
 4. **Device test matrix**: buy with a sandbox Apple ID; confirm the trial
    shows "14 days free first" on a fresh sandbox account and does *not* on
    one that has already used it; cancel in sandbox and confirm the app falls
    back to the free tier with meals, export, reflections and existing
-   findings all intact; restore on a second device.
+   findings all intact; restore on a second device. Also confirm the free
+   tier files a meal as typed (`parse_status = 'manual'`) rather than
+   erroring, and that the Settings row shows the device's view and the
+   server's view of entitlement side by side.

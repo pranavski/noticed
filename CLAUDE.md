@@ -19,6 +19,8 @@ for generate-insights (it selects and writes copy; it does no arithmetic).
 HealthKit read-only.
 
 ## Source-of-truth docs — read before relevant work
+- CONTEXT.md  (glossary: entitlement, free, generation, description vs
+  inference — the terms the paid line is drawn in)
 - docs/food-body-record-mvp-spec.md  (schema, screens, insight rules)
 - Soma/DesignSystem/ (Theme.swift, Color+Soma.swift, Components/) — the
   "kitchen notebook" (Mise direction) UI system. There is no visual

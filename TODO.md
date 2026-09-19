@@ -48,17 +48,54 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       P2W trial and the P1Y period against the config file.
 - [x] **Free-tier gating.** Logging, record, export, reflections and
       already-surfaced findings are free forever and asserted as such in
-      `SubscriptionStateTests`; only generation is gated.
+      `SubscriptionStateTests`. **Amended 2026-09-19:** AI parsing is no
+      longer free — see the next section.
 - [ ] **App Store Connect: create the subscription product** —
       `com.pranavsurampudi.noticed.yearly`, $15/yr, 2-week free trial, and
       sign the Paid Applications agreement. Until then the paywall is empty
       in production. Steps in `docs/deployment-checklist.md` §9.
-- [ ] **Server-side entitlement via App Store Server Notifications V2.**
-      The client gate is UI only — the Edge Functions spend money and are
-      reachable with any valid JWT. Must be a row the functions read, written
-      by Apple's notifications, NOT by the client. Until it lands the
-      subscription is not actually enforced; don't call the app
-      subscription-gated in review notes. `docs/deployment-checklist.md` §9.3.
+
+## From the 2026-09-19 subscription-enforcement decisions
+
+Design decided in full in
+`docs/decisions/2026-09-19-subscription-enforcement.md`; execution order and
+the landmine in it are in `docs/deployment-checklist.md` §9.3. Do them in
+this order — fail-closed checks shipped before the writer exists mean an
+empty table, universal refusal, and a dead app.
+
+- [x] Decision record, `CONTEXT.md` glossary, checklist §9.3 rewritten,
+      supersession notes on the 2026-09-10 record §2–§3.
+- [ ] **`appAccountToken` = the Supabase `user_id`** in
+      `SubscriptionStore.purchase()`. One line, and the only irreversible
+      item on this list: transactions bought without it can never be joined
+      to a user. Must be in the first build capable of selling.
+- [ ] **AI parsing moves to the paid side.** `MealLogger` routes a
+      non-entitled reader down the existing `AIDisclosure.decline()` /
+      `parse_status = 'manual'` path instead of calling `parse-meal`. Add
+      `canParseMeals` to `SubscriptionState` and assert it in
+      `SubscriptionStateTests` alongside the five free-forever promises.
+- [ ] **Paywall and listing copy** say what is actually paid: free accounts
+      file meals as written, a subscription reads them into ingredients.
+      `SubscribeSheet`, `docs/app-store-connect-copy.md`. Re-read
+      `docs/app-store-compliance.md` against the new copy.
+- [ ] **Trial-tail warning.** Around day 11 of an active trial with the
+      coverage gate still uncleared, the Noticed tab and the kitchen's "The
+      nightly engine" row say how many days short and how to cancel.
+      In-app only — no notification permission prompt.
+- [ ] **Entitlement table** (`ai_consent`-shaped, owner-can-select, no write
+      policy, stores `environment`, honours Sandbox and Production).
+- [ ] **ASSN V2 webhook** Edge Function: verify the JWS chain, upsert.
+      Configure both notification URLs in ASC; enable the 16-day grace
+      period and treat billing retry as entitled.
+- [ ] **Reconciler** against the App Store Server API — on demand when a
+      user claims entitlement with no row, plus a periodic sweep. The
+      fail-closed decision depends on this existing.
+- [ ] **The checks, shadow mode first**: entitlement join on the cron
+      fan-out, re-check inside `generate-insights`, `parse-meal` refusing by
+      filing `manual` rather than erroring. Log the verdict, enforce
+      nothing, flip only after real notifications are seen arriving.
+- [ ] Settings row showing the device's view and the server's view of
+      entitlement side by side (this is what the select policy is for).
 
 ## Before the next TestFlight build
 

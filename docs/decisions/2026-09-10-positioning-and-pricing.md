@@ -38,6 +38,12 @@ far better-funded competitors.
 
 ## 2. Subscription at $15/yr through StoreKit, 14-day trial
 
+> **Amended 2026-09-19.** The capped-free-tier option declined below was
+> reopened and declined again for a different reason, and the trial's tail
+> case — a sporadic logger billed before ever clearing the coverage gate —
+> is now warned in-app rather than accepted. Yearly-only is reaffirmed.
+> See `2026-09-19-subscription-enforcement.md` §1, §3, §4.
+
 - **StoreKit IAP, not Stripe.** Guideline 3.1.1 requires IAP to unlock
   functionality. The US link-out carve-out following the 2025 Epic injunction
   would permit Stripe on the US storefront only, and Stripe's own rate on a
@@ -58,6 +64,13 @@ fits the philosophy better (it gates only the thing that costs money) but was
 judged to complicate the first release.
 
 ## 3. What a lapsed subscriber keeps
+
+> **Superseded in part, 2026-09-19.** What this section describes was never
+> built: the nightly fan-out ran for every consenting user and `parse-meal`
+> was called for everyone, so in the shipped app only pull-to-refresh was
+> gated. The line below is now the intended one *and* the enforced one, with
+> AI parsing explicitly on the paid side of it. See
+> `2026-09-19-subscription-enforcement.md` §0–§2 and §5–§11.
 
 Logging stays free forever. Meals file as typed through the existing
 declined-consent path (`AIDisclosure.decline()`, `parse_status = 'manual'`),
