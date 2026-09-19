@@ -189,6 +189,12 @@ What is not built, in the order it has to happen:
 2. **Paid Applications agreement + banking.** Products stay in "Missing
    Metadata"/"Waiting for Review" and never load until this is signed.
 
+   **Leave the "License Agreement" field at Apple's standard EULA.** The
+   paywall's required 3.1.2 terms link (`SomaFeatures.termsOfUseURL`) points
+   at exactly that document. Filing a custom EULA without moving the
+   constant means the paywall links to an agreement that no longer governs
+   the purchase.
+
 3. **Server-side entitlement — the gate that actually matters.**
    `SubscriptionStore` decides what the *app* offers. It does not and cannot
    decide what the *server* does: `parse-meal` and `generate-insights` cost
@@ -231,7 +237,12 @@ What is not built, in the order it has to happen:
    costs money, it leaks nothing) — but do not describe the app as
    subscription-gated in App Store Connect review notes before the flip.
 
-4. **Device test matrix**: buy with a sandbox Apple ID; confirm the trial
+4. **Paywall links (3.1.2)**: tap "terms of use" and "privacy policy" on
+   the paywall and confirm both open — the terms link leaves for Apple's
+   standard EULA in Safari, privacy opens the in-app policy. A reviewer
+   taps both; a dead link here is a rejection, not a bug report.
+
+5. **Device test matrix**: buy with a sandbox Apple ID; confirm the trial
    shows "14 days free first" on a fresh sandbox account and does *not* on
    one that has already used it; cancel in sandbox and confirm the app falls
    back to the free tier with meals, export, reflections and existing

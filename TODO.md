@@ -95,14 +95,17 @@ empty table, universal refusal, and a dead app.
       nothing, flip only after real notifications are seen arriving.
 - [ ] Settings row showing the device's view and the server's view of
       entitlement side by side (this is what the select policy is for).
-- [ ] **Guideline 3.1.2 paywall disclosures — found 2026-09-19, not yet
-      decided.** `docs/app-store-compliance.md` has no in-app-purchase
-      section at all. An auto-renewable subscription's paywall must carry
-      functional links to the Terms of Use (EULA) and the privacy policy
-      alongside the price and period. `SubscribeSheet` has the price, the
-      period, the trial and a restore path, but neither link, and there is
-      no Terms URL in `SomaFeatures` to link to. Needs a hosted terms page
-      (Apple's standard EULA is acceptable) before submission.
+- [x] **Guideline 3.1.2 paywall disclosures.** `SubscribeSheet` now says
+      the subscription renews itself each year until cancelled (and that the
+      14 free days become the first paid year), and carries both required
+      links: terms of use → `SomaFeatures.termsOfUseURL`, Apple's standard
+      EULA; privacy → the in-app policy sheet, which needs no network.
+      `docs/app-store-compliance.md` has a 3.1.2 section now, and
+      `SubscriptionStateTests.testPaywallCarriesTermsAndPrivacyLinks` pins
+      the links so a typo fails a test rather than a review.
+      **One ASC condition:** leave the App Store Connect "License Agreement"
+      field at Apple's standard EULA, or file a custom one and move the
+      constant with it in the same change.
 
 ## Before the next TestFlight build
 

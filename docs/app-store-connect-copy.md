@@ -25,6 +25,7 @@ pitch, not a disclaimer bolted to it. See
 | Privacy Policy URL | https://pranavski.github.io/soma/privacy/ (once Pages is live; must resolve before submission) |
 | Support URL | https://pranavski.github.io/soma/ (same site; the page lists the support email) |
 | Support email | pranav.surampudi@gmail.com |
+| License Agreement | **Apple's standard EULA — leave it alone.** The paywall's 3.1.2 terms link (`SomaFeatures.termsOfUseURL`) points at that exact document; a custom EULA means changing the constant too |
 | Copyright | 2026 Pranav Surampudi |
 | Age rating | Complete the questionnaire truthfully; see below |
 
