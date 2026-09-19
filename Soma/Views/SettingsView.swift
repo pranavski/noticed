@@ -127,15 +127,37 @@ struct SettingsView: View {
     /// Says where the subscription actually stands, in the app's own terms
     /// rather than the App Store's. A lapsed reader is told what still
     /// works, not what they have lost.
+    ///
+    /// A trial counts down here once it is close, so the charge is never a
+    /// surprise from this screen either. The fuller notice — how far short of
+    /// the first look you still are — lives on the Noticed tab, which has the
+    /// coverage numbers already loaded; fetching them here would mean three
+    /// network reads to fill in a row subtitle.
     private var subscriptionNote: String {
         switch subscriptions.state {
         case .free:
             return "off · the notebook still works"
-        case .trial:
-            return "on · in the first 14 days"
+        case .trial(let expires):
+            guard let expires, let days = Self.trialDaysLeft(expires) else {
+                return "on · in the first 14 days"
+            }
+            switch days {
+            case 0:  return "on · trial ends today"
+            case 1:  return "on · trial ends tomorrow"
+            default: return "on · \(days) days left in the trial"
+            }
         case .subscribed:
             return "on · looking every night"
         }
+    }
+
+    /// Whole days left, rounded up, or nil when there is still plenty of
+    /// trial to run (or none at all) and the plain copy reads better.
+    /// Mirrors `TrialTailWarning`'s arithmetic.
+    private static func trialDaysLeft(_ expires: Date, now: Date = Date()) -> Int? {
+        guard expires > now else { return nil }
+        let days = Int(ceil(expires.timeIntervalSince(now) / 86_400))
+        return days <= TrialTailWarning.noticeWindowDays ? days : nil
     }
 
     /// The row used to read "sleep, steps, energy" whether or not anything

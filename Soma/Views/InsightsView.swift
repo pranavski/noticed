@@ -27,6 +27,16 @@ struct InsightsView: View {
                         .padding(.top, Theme.Spacing.l)
                         .padding(.horizontal, Theme.Spacing.xl)
 
+                    // Before the charge, not after: a trialist still short
+                    // of the gate is told so while cancelling is still free.
+                    if let note = TrialTailWarning.note(
+                        state: subscriptions.state,
+                        coverage: vm.coverage
+                    ) {
+                        TrialTailNotice(note: note)
+                            .padding(.horizontal, Theme.Spacing.xl)
+                    }
+
                     if vm.isGenerating {
                         ThinkingRow()
                             .padding(.horizontal, Theme.Spacing.xl)
@@ -454,6 +464,35 @@ private struct ReflectionRow: View {
                     .fixedSize(horizontal: false, vertical: true)
             }
         }
+    }
+}
+
+/// The trial-tail notice. Persimmon like every other hedge in the app, and
+/// shaped like a margin note rather than an alert — it is information, not a
+/// warning bell, and it must not read as a growth nudge. See
+/// `TrialTailWarning`.
+private struct TrialTailNotice: View {
+    let note: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            Text("BEFORE YOU'RE CHARGED")
+                .font(Font.Soma.sectionTag)
+                .tracking(2)
+                .foregroundStyle(Color.persimmon)
+
+            Text(note)
+                .font(Font.Soma.dishNote)
+                .foregroundStyle(Color.ink)
+                .lineSpacing(3)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Theme.Spacing.l)
+        .background(
+            RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
+                .fill(Color.paperRaised)
+        )
     }
 }
 

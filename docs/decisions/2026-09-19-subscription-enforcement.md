@@ -79,8 +79,12 @@ have never once received.
 
 `InsightCoverage` already computes, on-device, exactly how short they are.
 So around day 11 of an active trial with the gate still uncleared, the
-Noticed tab and the kitchen's "The nightly engine" row say it plainly —
-how many days short, and how to cancel.
+Noticed tab says it plainly — how many days short, and how to cancel.
+
+The kitchen's "The nightly engine" row carries the countdown only ("3 days
+left in the trial"), not the shortfall: coverage is three network reads, and
+the Noticed tab has already paid for them while the kitchen has not. The row
+that would have to fetch them is a subtitle.
 
 **In-app only.** Not a local notification: asking permission to send
 notifications *in order to talk someone out of paying us* is a strange

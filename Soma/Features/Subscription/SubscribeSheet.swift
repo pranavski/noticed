@@ -11,6 +11,12 @@ import SwiftUI
 /// No urgency, no countdown, no "most popular" badge, no crossed-out price.
 /// One price, one button, and an honest sentence about what happens if you
 /// never pay: everything you have written down stays yours and keeps working.
+///
+/// Since 2026-09-19 a subscription buys two things, not one — reading a meal
+/// into ingredients, and the nightly look at what that adds up to. The first
+/// is named here plainly rather than left for someone to discover when their
+/// first free meal files as a bare line of their own words. See
+/// `docs/decisions/2026-09-19-subscription-enforcement.md` §1.
 struct SubscribeSheet: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var subscriptions: SubscriptionStore
@@ -30,10 +36,12 @@ struct SubscribeSheet: View {
                         .lineSpacing(3)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Text("every night it scores what you've logged against how "
-                       + "your days went, corrects for having looked at a lot of "
-                       + "pairings at once, and writes up only what survives. "
-                       + "most nights that's nothing, and it says so.")
+                    Text("it reads what you log — \"eggs on sourdough\" becomes "
+                       + "ingredients and a range — and then, every night, it "
+                       + "scores all of it against how your days went, corrects "
+                       + "for having looked at a lot of pairings at once, and "
+                       + "writes up only what survives. most nights that's "
+                       + "nothing, and it says so.")
                         .font(Font.Soma.dishNote)
                         .foregroundStyle(Color.inkSoft)
                         .lineSpacing(3)
@@ -59,7 +67,9 @@ struct SubscribeSheet: View {
                        + "is taken away — your meals, your record, your export "
                        + "and the daily notes about your own log all keep "
                        + "working, and the findings you've already been shown "
-                       + "stay where they are.")
+                       + "stay where they are. new meals file in your own words "
+                       + "from then on, and you can fill in the details by hand "
+                       + "whenever you like.")
                         .font(Font.Soma.margin)
                         .foregroundStyle(Color.inkSoft)
                         .lineSpacing(2)
@@ -101,7 +111,8 @@ struct SubscribeSheet: View {
                 .foregroundStyle(Color.inkSoft)
 
             ForEach([
-                "logging meals — by voice, by hand, or one tap to repeat",
+                "logging meals — by voice, by hand, or one tap to repeat — "
+                    + "filed in your own words",
                 "your whole record, and the spreadsheet export of it",
                 "the daily notes describing what you've written down",
                 "findings you've already been shown",
