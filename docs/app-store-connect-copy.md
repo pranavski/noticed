@@ -38,7 +38,7 @@ If you've wondered whether something you eat is affecting how you sleep, how you
 
 Most apps in this category will tell you something confident. Noticed will usually tell you nothing, because for most of what people wonder about themselves there isn't enough evidence yet to say. When it does say something, the number behind it is real.
 
-Say what you ate. "Eggs on sourdough, black coffee." It's written down as a meal with an estimated calorie range, never a single number, because nobody knows a plate to the calorie. Correct it if it's wrong. Repeat it with one tap tomorrow.
+Say what you ate. "Eggs on sourdough, black coffee." A subscription reads that into ingredients with an estimated calorie range, never a single number, because nobody knows a plate to the calorie. Correct it if it's wrong. Repeat it with one tap tomorrow. Without a subscription the meal is still logged, in your own words, and you can fill in the details by hand.
 
 If you connect Apple Health, Noticed reads daily totals only: steps, sleep, resting heart rate, heart rate variability, weight, active energy and workout minutes. It never writes to Health. The raw readings never leave your phone. Connecting also reads the last 30 days, so that half of the picture is usually complete from day one.
 
@@ -51,7 +51,7 @@ What Noticed is not: it is not medical advice, it does not diagnose, it does not
 Privacy, plainly:
 • Sign in with Apple. Hide My Email works.
 • Meal text and the nightly summary go to Claude, an AI model made by Anthropic, only after you agree in the app. You can say no and keep logging.
-• Free to keep the record. A subscription covers the nightly engine; the notebook, the export and the daily descriptions of your own log never expire.
+• Free to keep the record. A subscription covers reading your meals into ingredients and the nightly engine that looks across them; logging, the notebook, the export, and the daily descriptions of your own log never expire.
 • No ads, no tracking, no analytics SDKs, nothing sold.
 • Export everything as a spreadsheet, or delete your account and all of its data, from inside the app.
 

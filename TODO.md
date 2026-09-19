@@ -65,22 +65,21 @@ empty table, universal refusal, and a dead app.
 
 - [x] Decision record, `CONTEXT.md` glossary, checklist §9.3 rewritten,
       supersession notes on the 2026-09-10 record §2–§3.
-- [ ] **`appAccountToken` = the Supabase `user_id`** in
+- [x] **`appAccountToken` = the Supabase `user_id`** in
       `SubscriptionStore.purchase()`. One line, and the only irreversible
       item on this list: transactions bought without it can never be joined
       to a user. Must be in the first build capable of selling.
-- [ ] **AI parsing moves to the paid side.** `MealLogger` routes a
+- [x] **AI parsing moves to the paid side.** `MealLogger` routes a
       non-entitled reader down the existing `AIDisclosure.decline()` /
       `parse_status = 'manual'` path instead of calling `parse-meal`. Add
       `canParseMeals` to `SubscriptionState` and assert it in
       `SubscriptionStateTests` alongside the five free-forever promises.
-- [ ] **Paywall and listing copy** say what is actually paid: free accounts
+- [x] **Paywall and listing copy** say what is actually paid: free accounts
       file meals as written, a subscription reads them into ingredients.
-      `SubscribeSheet`, `docs/app-store-connect-copy.md`. Re-read
-      `docs/app-store-compliance.md` against the new copy.
-- [ ] **Trial-tail warning.** Around day 11 of an active trial with the
-      coverage gate still uncleared, the Noticed tab and the kitchen's "The
-      nightly engine" row say how many days short and how to cancel.
+      `SubscribeSheet`, `docs/app-store-connect-copy.md`.
+- [x] **Trial-tail warning.** `TrialTailWarning` + `TrialTailWarningTests`;
+      the Noticed tab carries the shortfall and the cancel path, the kitchen
+      row carries the countdown only (coverage is three network reads).
       In-app only — no notification permission prompt.
 - [ ] **Entitlement table** (`ai_consent`-shaped, owner-can-select, no write
       policy, stores `environment`, honours Sandbox and Production).
@@ -96,6 +95,14 @@ empty table, universal refusal, and a dead app.
       nothing, flip only after real notifications are seen arriving.
 - [ ] Settings row showing the device's view and the server's view of
       entitlement side by side (this is what the select policy is for).
+- [ ] **Guideline 3.1.2 paywall disclosures — found 2026-09-19, not yet
+      decided.** `docs/app-store-compliance.md` has no in-app-purchase
+      section at all. An auto-renewable subscription's paywall must carry
+      functional links to the Terms of Use (EULA) and the privacy policy
+      alongside the price and period. `SubscribeSheet` has the price, the
+      period, the trial and a restore path, but neither link, and there is
+      no Terms URL in `SomaFeatures` to link to. Needs a hosted terms page
+      (Apple's standard EULA is acceptable) before submission.
 
 ## Before the next TestFlight build
 
