@@ -5,7 +5,7 @@ TestFlight/App Store build. Run top to bottom.
 
 > **State on 2026-09-08.** Done: every migration applied (30/30), all four
 > functions deployed, GitHub Pages live at
-> https://pranavski.github.io/soma/privacy/, `privacyPolicyIsHosted` true.
+> https://pranavski.github.io/noticed/privacy/, `privacyPolicyIsHosted` true.
 > Outstanding: `APPLE_KEY_ID` and `APPLE_PRIVATE_KEY` (§2) — the other two
 > Apple secrets are set, so revocation is *half* configured and does
 > nothing; `delete-account` logs which are missing. Then §6 (App Store

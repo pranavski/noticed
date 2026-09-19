@@ -41,7 +41,7 @@ function empty(status: number): Response {
 // Requires secrets — all four, or revocation is skipped (loudly: an
 // incomplete config is an operator mistake, and App Review does test
 // deletion on SIWA apps, so it must not disappear into a silent return):
-//   APPLE_CLIENT_ID    — the app's bundle id (com.pranavsurampudi.soma)
+//   APPLE_CLIENT_ID    — the app's bundle id (com.pranavsurampudi.noticed)
 //   APPLE_TEAM_ID      — 10-char developer team id
 //   APPLE_KEY_ID       — key id of the SIWA .p8 key
 //   APPLE_PRIVATE_KEY  — the .p8 PEM contents

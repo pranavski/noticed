@@ -543,7 +543,7 @@ new required-reason API it adopts lands on the app manifest.
 
 ### Still open — not closeable in code
 
-- [x] **LEGAL** — Policy hosted at https://pranavski.github.io/soma/privacy/
+- [x] **LEGAL** — Policy hosted at https://pranavski.github.io/noticed/privacy/
   (GitHub Pages, published from `docs/privacy-policy.md` by
   `.github/workflows/pages.yml`). `privacyPolicyIsHosted` is true, so the
   sheet now shows the web link alongside the full text (2026-09-08)

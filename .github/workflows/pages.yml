@@ -3,7 +3,7 @@
 # in the repo.
 #
 # One-time setup: repo Settings → Pages → Build and deployment → Source:
-# "GitHub Actions". Then the URL is https://<owner>.github.io/soma/privacy/
+# "GitHub Actions". Then the URL is https://<owner>.github.io/noticed/privacy/
 # — put that in App Store Connect and in SomaFeatures.privacyPolicyURL,
 # and flip privacyPolicyIsHosted once you have opened it in a browser.
 #

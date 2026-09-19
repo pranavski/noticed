@@ -22,8 +22,8 @@ pitch, not a disclaimer bolted to it. See
 | Primary category | Food & Drink |
 | Secondary category | (none) |
 | Bundle ID | com.pranavsurampudi.noticed |
-| Privacy Policy URL | https://pranavski.github.io/soma/privacy/ (once Pages is live; must resolve before submission) |
-| Support URL | https://pranavski.github.io/soma/ (same site; the page lists the support email) |
+| Privacy Policy URL | https://pranavski.github.io/noticed/privacy/ (live since 2026-09-19) |
+| Support URL | https://pranavski.github.io/noticed/ (same site; the page lists the support email) |
 | Support email | pranav.surampudi@gmail.com |
 | License Agreement | **Apple's standard EULA — leave it alone.** The paywall's 3.1.2 terms link (`SomaFeatures.termsOfUseURL`) points at that exact document; a custom EULA means changing the constant too |
 | Copyright | 2026 Pranav Surampudi |
@@ -120,7 +120,12 @@ Order and caption. Captions are optional; if used, keep them to these.
 2. Today with a few meals and calorie ranges visible. Caption: "say it, it's written."
 3. Capture sheet mid-dictation. Caption: "ten seconds, by voice or by hand."
 4. Today with the compare-yesterday overlay. Caption: "yesterday, laid over today."
-5. HealthKit sheet showing the seven daily totals. Caption: "daily totals only. readings stay on your phone."
-6. The consent sheet. Caption: "you decide what goes to Claude."
+5. The consent sheet. Caption: "you decide what goes to Claude."
+6. The kitchen (Settings), export and delete visible. Caption: "export it, or delete it, any time."
+
+The shipped set is in `DesignAssets/screenshots/iphone-6.9/` (re-shot
+2026-09-19). A HealthKit sheet with the seven daily totals would be a
+stronger slot 6 ("daily totals only. readings stay on your phone."), but
+it has to be captured on a connected device.
 
 Do not include: the sign-in screen, the delete-account sheet, anything that reads as a goal or a target.

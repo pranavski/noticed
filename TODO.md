@@ -10,9 +10,7 @@ decision created are listed under "From the 2026-09-10 decisions" below.
 
 ## From the 2026-09-10 decisions
 
-- [x] `parse-meal` on `claude-sonnet-5`. **Needs a redeploy**
-      (`supabase functions deploy parse-meal`) — the change is in the repo
-      only.
+- [x] `parse-meal` on `claude-sonnet-5` — deployed 2026-09-19 (v10).
 - [x] Renamed to Noticed: display name, bundle ID
       (`com.pranavsurampudi.noticed`), purpose strings, all user-visible
       copy. Swift types, directories and storage keys deliberately unchanged.
@@ -21,11 +19,15 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       (`InsightCoverage`, `InsightCoverageTests`).
 - [x] App Store listing rewritten for the symptom cohort; new symptom-claim
       guardrail in `docs/app-store-compliance.md`.
-- [ ] **BLOCKING — re-point Sign in with Apple at the new bundle id.**
+- [x] **BLOCKING — re-point Sign in with Apple at the new bundle id.**
+      **Done 2026-09-19** — the Auth provider's Client ID is now
+      `com.pranavsurampudi.noticed,com.pranavsurampudi.soma` (drop `.soma`
+      once no old builds are installed). Remaining: verify sign-in on a
+      real device.
       The native SIWA flow uses the bundle id AS the client id, so the
       rename broke it in three places at once: the Apple App ID, the
-      Supabase Auth provider's Client ID, and the `APPLE_CLIENT_ID` secret
-      (set 2026-09-08, still says `.soma`). Sign-in fails and deletion stops
+      Supabase Auth provider's Client ID, and the `APPLE_CLIENT_ID` secret.
+      Sign-in fails and deletion stops
       revoking until all three say `com.pranavsurampudi.noticed`. Full steps
       in `docs/deployment-checklist.md` §5. Fold this into the outstanding
       `.p8` key task below — the key must be created against the new App ID,
@@ -34,13 +36,14 @@ decision created are listed under "From the 2026-09-10 decisions" below.
 - [ ] **Trademark and domain check on "Noticed"** — the App Store search
       check came back clean (1 near-match) but neither of these was run.
       Do this before anything is filed under the name.
-- [ ] **Rename the GitHub repo and move the Pages URL.**
-      `SomaFeatures.privacyPolicyURL` still points at
-      `pranavski.github.io/soma/privacy/` **on purpose** — it is live and
-      correct today, and repointing it before the repo moves would ship a
-      404 as the privacy policy. Rename the repo, confirm the new Pages URL
-      resolves, then change the constant and the App Store Connect field
-      together.
+- [x] **Rename the GitHub repo and move the Pages URL.** Done 2026-09-19:
+      repo is `pranavski/noticed`; https://pranavski.github.io/noticed/privacy/
+      verified 200 before `SomaFeatures.privacyPolicyURL` moved to it. The
+      old `/soma/` and `/soma/privacy/` paths redirect via stubs in the
+      `pranavski.github.io` repo (`soma/`), so earlier builds keep a working
+      link — delete the stubs only if a repo named `soma` is ever recreated.
+      App Store Connect was never filed with the old URL; use the new one
+      (see `docs/app-store-connect-copy.md`).
 - [x] **StoreKit subscription, client half.** `SubscriptionStore`,
       `SubscribeSheet`, the kitchen row, the pull-to-refresh gate and
       `Noticed.storekit` (wired into the shared scheme, so an Xcode run
@@ -112,22 +115,22 @@ empty table, universal refusal, and a dead app.
 Done 2026-09-08: PR #3 merged to main; all 30 migrations applied; all four
 Edge Functions deployed; GitHub Pages live; `privacyPolicyIsHosted` flipped.
 
-- [ ] **Create the Sign in with Apple key and set the last two secrets.**
-      `APPLE_CLIENT_ID` and `APPLE_TEAM_ID` (8VZH2497GC) are set;
-      `APPLE_KEY_ID` and `APPLE_PRIVATE_KEY` are not, because the `.p8`
-      only exists once a human makes it at developer.apple.com →
-      Certificates → Keys → new key with "Sign in with Apple" enabled for
-      the Soma App ID. Until then deletion works but Apple is never told —
-      `delete-account` now logs exactly that, so check the function logs
-      after the first test deletion.
-- [ ] App Store Connect: privacy URL, support URL (both move with the repo
-      rename above — do not file them until the new Pages URL resolves),
+- [x] **Create the Sign in with Apple key and set the last two secrets.**
+      Done 2026-09-19: key `LRCDV553QF` created against the `.noticed` App
+      ID; `APPLE_CLIENT_ID` (now `com.pranavsurampudi.noticed`),
+      `APPLE_TEAM_ID` (8VZH2497GC), `APPLE_KEY_ID` and `APPLE_PRIVATE_KEY`
+      all set and hash-verified. Still check the `delete-account` logs after
+      the first test deletion to confirm Apple is actually told.
+- [ ] App Store Connect: the app record for `com.pranavsurampudi.noticed`
+      exists (created 2026-09-19). Still to fill: privacy URL, support URL
+      (the `/noticed/` URLs are live — file those, not `/soma/`),
       nutrition label, age rating, review notes, screenshots — paste from
       docs/app-store-connect-copy.md; status in docs/app-store-compliance.md §6.
 - [ ] Seed a reviewer-visible insight with docs/reviewer-seed.sql, record a
       short video, attach it to the submission.
-- [ ] Re-shoot screenshots — the wordmark, the empty-state countdown and
-      several copy strings all changed with the rename.
+- [x] Re-shoot screenshots — done 2026-09-19, six captioned 6.9" frames in
+      `DesignAssets/screenshots/iphone-6.9/` (`capture.sh` + `compose.py`
+      regenerate them). Upload them in ASC with the item above.
 - [ ] Device smoke test, docs/deployment-checklist.md §8 — especially
       deletion (step 5) and the consent-decline path (step 7).
 

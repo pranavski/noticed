@@ -12,11 +12,13 @@ enum SomaFeatures {
     /// this resolves.
     ///
     /// Published by `.github/workflows/pages.yml` from
-    /// `docs/privacy-policy.md`. Live since 2026-09-08 — verified 200 with
-    /// the full policy text and its stylesheet. The same URL goes in the
+    /// `docs/privacy-policy.md`. Live since 2026-09-08; moved from
+    /// `/soma/privacy/` with the repo rename on 2026-09-19 and verified 200
+    /// (the old path redirects here from the pranavski.github.io repo so
+    /// earlier builds keep a working link). The same URL goes in the
     /// App Store Connect metadata field; the in-app sheet carries the text
     /// as well, so review passes even if the page is briefly unreachable.
-    static let privacyPolicyURL = URL(string: "https://pranavski.github.io/soma/privacy/")
+    static let privacyPolicyURL = URL(string: "https://pranavski.github.io/noticed/privacy/")
 
     /// True once `privacyPolicyURL` resolves — it gates the sheet's "read
     /// this policy on the web" link, so a reviewer never taps a dead page.
