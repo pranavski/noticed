@@ -22,6 +22,23 @@ enum SomaFeatures {
     /// this policy on the web" link, so a reviewer never taps a dead page.
     static let privacyPolicyIsHosted = true
 
+    /// The subscription's terms of use (EULA), linked from the paywall.
+    ///
+    /// Guideline 3.1.2 requires an auto-renewable subscription's paywall to
+    /// carry a **functional** link to the terms alongside the price and the
+    /// period. This points at Apple's standard EULA, which is the agreement
+    /// that actually governs the purchase as long as the App Store Connect
+    /// "License Agreement" field is left at Apple's standard — so the link
+    /// is honest, permanent, and cannot 404 the way a page of our own would
+    /// while the Pages site moves with the repo rename.
+    ///
+    /// If a custom EULA is ever filed in App Store Connect, this constant
+    /// and that field move together or the paywall starts describing an
+    /// agreement nobody signed.
+    static let termsOfUseURL = URL(
+        string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+    )
+
     /// Support contact, required alongside the privacy policy URL in ASC.
     /// The same address the markdown policy names.
     static let supportEmail = "pranav.surampudi@gmail.com"

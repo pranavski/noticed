@@ -73,6 +73,23 @@ final class SubscriptionStateTests: XCTestCase {
         XCTAssertEqual(trial.canParseMeals, paid.canParseMeals)
     }
 
+    /// Guideline 3.1.2: the paywall has to carry a **functional** link to
+    /// the terms of use (EULA) alongside the price and the period.
+    /// `SubscribeSheet` renders that link only when the URL parses, so a
+    /// typo would drop it silently and the first sign of it would be a
+    /// rejection rather than a red test.
+    func testPaywallCarriesTermsAndPrivacyLinks() throws {
+        let terms = try XCTUnwrap(SomaFeatures.termsOfUseURL)
+        XCTAssertEqual(terms.scheme, "https", "the terms link must not be insecure")
+
+        // The paywall's privacy link opens the in-app policy, which needs no
+        // network — but that sheet offers the hosted copy too, and only when
+        // this flag says it resolves.
+        let privacy = try XCTUnwrap(SomaFeatures.privacyPolicyURL)
+        XCTAssertEqual(privacy.scheme, "https")
+        XCTAssertTrue(SomaFeatures.privacyPolicyIsHosted)
+    }
+
     func testProductIDMatchesTheStoreKitConfiguration() throws {
         // Noticed.storekit is what the simulator sells; App Store Connect
         // must agree with both. A silent mismatch means an empty paywall.

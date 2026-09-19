@@ -22,6 +22,7 @@ struct SubscribeSheet: View {
     @EnvironmentObject private var subscriptions: SubscriptionStore
     @State private var isWorking = false
     @State private var trialAvailable = false
+    @State private var showingPrivacy = false
 
     var body: some View {
         ZStack {
@@ -63,17 +64,20 @@ struct SubscribeSheet: View {
 
                     actionRow
 
-                    Text("cancel any time in the App Store. if you stop, nothing "
-                       + "is taken away — your meals, your record, your export "
-                       + "and the daily notes about your own log all keep "
-                       + "working, and the findings you've already been shown "
-                       + "stay where they are. new meals file in your own words "
-                       + "from then on, and you can fill in the details by hand "
-                       + "whenever you like.")
+                    renewalTerms
+
+                    Text("if you stop, nothing is taken away — your meals, your "
+                       + "record, your export and the daily notes about your own "
+                       + "log all keep working, and the findings you've already "
+                       + "been shown stay where they are. new meals file in your "
+                       + "own words from then on, and you can fill in the details "
+                       + "by hand whenever you like.")
                         .font(Font.Soma.margin)
                         .foregroundStyle(Color.inkSoft)
                         .lineSpacing(2)
                         .fixedSize(horizontal: false, vertical: true)
+
+                    legalLinks
 
                     Spacer(minLength: 40)
                 }
@@ -82,6 +86,9 @@ struct SubscribeSheet: View {
         }
         .task {
             trialAvailable = await subscriptions.isEligibleForTrial
+        }
+        .sheet(isPresented: $showingPrivacy) {
+            PrivacyPolicySheet()
         }
     }
 
@@ -193,5 +200,70 @@ struct SubscribeSheet: View {
             .buttonStyle(.plain)
             .disabled(isWorking)
         }
+    }
+
+    /// Guideline 3.1.2's disclosure, in the app's own voice.
+    ///
+    /// A paywall for an auto-renewable subscription has to name the thing
+    /// being sold, its length, its price, and the fact that it renews on its
+    /// own — and it has to say that the free trial becomes a charge. Most of
+    /// that was already on this sheet in pieces; what was missing was the
+    /// word *renewing*, which is the piece a reader can be surprised by, and
+    /// so the piece Apple checks for.
+    private var renewalTerms: some View {
+        Text(renewalSentence)
+            .font(Font.Soma.dishNote)
+            .foregroundStyle(Color.inkSoft)
+            .lineSpacing(3)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
+    private var renewalSentence: String {
+        // The price and the name come from StoreKit or not at all — a
+        // hardcoded "$15" is wrong in every other storefront, and a wrong
+        // price on a paywall is a rejection on its own. When the store is
+        // unreachable the sentence drops the price rather than reading
+        // "— a year"; the button is disabled in that state anyway.
+        let renews: String
+        if let product = subscriptions.product {
+            renews = "\(product.displayName) — \(product.displayPrice) a year, "
+                   + "renewing itself each year until you cancel it in the "
+                   + "App Store."
+        } else {
+            renews = "Noticed, yearly — a subscription that renews each year "
+                   + "until you cancel it in the App Store."
+        }
+        guard trialAvailable else { return renews }
+        return renews + " the 14 free days become the first paid year when "
+             + "they run out; cancel before then and you're charged nothing."
+    }
+
+    /// The two links 3.1.2 requires. The terms open Apple's standard EULA —
+    /// the agreement that actually governs the purchase — and privacy opens
+    /// the full policy already carried in the app, so neither depends on a
+    /// page being reachable at review time.
+    private var legalLinks: some View {
+        HStack(alignment: .firstTextBaseline, spacing: Theme.Spacing.s) {
+            if let terms = SomaFeatures.termsOfUseURL {
+                Link(destination: terms) {
+                    legalLabel("terms of use")
+                }
+                Text("·")
+                    .font(Font.Soma.margin)
+                    .foregroundStyle(Color.inkSoft)
+            }
+            Button { showingPrivacy = true } label: {
+                legalLabel("privacy policy")
+            }
+            .buttonStyle(.plain)
+            Spacer(minLength: 0)
+        }
+    }
+
+    private func legalLabel(_ text: String) -> some View {
+        Text(text)
+            .font(Font.Soma.margin)
+            .underline()
+            .foregroundStyle(Color.inkSoft)
     }
 }
