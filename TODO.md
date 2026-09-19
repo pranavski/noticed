@@ -57,6 +57,14 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       `com.pranavsurampudi.noticed.yearly`, $15/yr, 2-week free trial, and
       sign the Paid Applications agreement. Until then the paywall is empty
       in production. Steps in `docs/deployment-checklist.md` §9.
+      **2026-09-19:** group "Noticed" and the product exist (1 year, display
+      name "Noticed, yearly", description trimmed to ASC's 55-char limit:
+      "The nightly engine. Your notebook stays free."), upfront billing in
+      all 175 countries. **Blocked:** saving a price errors until the
+      Account Holder accepts the updated Developer Program License Agreement
+      and signs the Paid Apps agreement (only Free Apps is active). After
+      that: price $15.00, then the 2-week free introductory offer, then a
+      paywall screenshot for review.
 
 ## From the 2026-09-19 subscription-enforcement decisions
 
