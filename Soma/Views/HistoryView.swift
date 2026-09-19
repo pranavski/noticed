@@ -5,6 +5,20 @@ import SwiftUI
 /// flip through. Tapping a day brings its card to the front.
 struct HistoryView: View {
     @StateObject private var vm = HistoryViewModel()
+    @EnvironmentObject private var subscriptions: SubscriptionStore
+
+    /// Whether a meal logged right now may be read into ingredients.
+    ///
+    /// `isLoading` counts as entitled, matching `InsightsView`: a subscriber
+    /// who logs a meal in the second before the first entitlement read lands
+    /// must not have it filed unparsed, which is not something they could
+    /// undo without retyping it. A free reader can win that race once per
+    /// launch and get one parse; `parse-meal` makes the decision that costs
+    /// money, and this one only decides what the app offers.
+    private var canParseMeals: Bool {
+        subscriptions.isLoading || subscriptions.state.canParseMeals
+    }
+
     @State private var selectedDay: Int = Calendar.current.component(.day, from: Date())
     /// The day whose check-in sheet is open. Nil = dismissed.
     @State private var checkingIn: DayTarget?
@@ -123,7 +137,14 @@ struct HistoryView: View {
                 recentDishes: vm.recentDishes,
                 onSubmit: { transcript, source, eatenAt in
                     loggingDay = nil
-                    Task { await vm.log(transcript: transcript, source: source, eatenAt: eatenAt) }
+                    Task {
+                        await vm.log(
+                            transcript: transcript,
+                            source: source,
+                            eatenAt: eatenAt,
+                            canParseMeals: canParseMeals
+                        )
+                    }
                 },
                 onRepeat: { dish, eatenAt in
                     loggingDay = nil

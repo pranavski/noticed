@@ -1,16 +1,24 @@
 import Foundation
 import OSLog
 import StoreKit
+import Supabase
 
 /// What the reader is entitled to right now.
 ///
 /// The line this draws is the one decided in
-/// `docs/decisions/2026-09-10-positioning-and-pricing.md` §3:
+/// `docs/decisions/2026-09-10-positioning-and-pricing.md` §3 and moved by
+/// `2026-09-19-subscription-enforcement.md` §1:
 /// **descriptions are free, inferences are paid.** Logging, the record,
 /// export, deletion and the daily reflections never expire — reflections are
 /// pure server-side templating with no model call behind them, so a free
 /// account costs nothing to keep honest. What a subscription buys is the
-/// nightly engine: new findings.
+/// nightly engine, and the reading of a meal into ingredients that feeds it.
+///
+/// Parsing sits on the paid side as of 2026-09-19. It is the per-meal cost
+/// and the dominant one; leaving it free meant a lapsed account cost roughly
+/// $0.75/month forever against no revenue. A free account still logs
+/// everything, in its own words, through the same path a declined-consent
+/// account uses — so the record is never blocked, only left unread.
 ///
 /// Insights already surfaced stay readable after a lapse. They were true when
 /// they were written and they are the reader's own record; withdrawing them
@@ -30,6 +38,16 @@ enum SubscriptionState: Equatable {
         case .trial, .subscribed: return true
         }
     }
+
+    /// Whether a logged meal may be sent to `parse-meal` to be read into
+    /// ingredients and ranges. Free accounts file meals as written instead —
+    /// see `MealLogger.log`, which routes them down the path a
+    /// declined-consent account already takes.
+    ///
+    /// This is a client-side routing decision, not the gate. `parse-meal`
+    /// makes its own, and refuses by filing the meal as written rather than
+    /// by erroring.
+    var canParseMeals: Bool { canGenerateInsights }
 
     /// Everything below is free forever and must stay that way. Kept as an
     /// explicit property rather than an implicit truth so that a future gate
@@ -55,6 +73,10 @@ enum SubscriptionState: Equatable {
 /// `generate-insights` cost real money per call and are reachable with any
 /// valid JWT, so the server has to make its own decision — see the TODO in
 /// `docs/deployment-checklist.md`. Treat this type as UI state.
+///
+/// The one thing here the server genuinely depends on is `appAccountToken`,
+/// set on every purchase: it is how Apple's notifications say *which* of our
+/// readers a transaction belongs to. See `purchase()`.
 @MainActor
 final class SubscriptionStore: ObservableObject {
 
@@ -75,7 +97,17 @@ final class SubscriptionStore: ObservableObject {
         subsystem: "com.pranavsurampudi.noticed", category: "subscription"
     )
 
-    init() {
+    /// Resolves the signed-in reader's id for `appAccountToken`. Injected so
+    /// a test can drive `purchase()` without a session; the default reads the
+    /// same session every repository reads.
+    private let currentUserID: @Sendable () async -> UUID?
+
+    init(
+        currentUserID: @escaping @Sendable () async -> UUID? = {
+            try? await SupabaseClient.shared.auth.session.user.id
+        }
+    ) {
+        self.currentUserID = currentUserID
         #if DEBUG
         // Screenshot and preview runs are always entitled; the paywall has
         // its own preview flag so it can still be captured deliberately.
@@ -150,6 +182,32 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
+    /// Binds the purchase to the signed-in reader.
+    ///
+    /// `appAccountToken` is the join between Apple's world and ours: Apple
+    /// echoes it on the transaction and in every App Store Server
+    /// Notification, which is the only way the webhook that writes
+    /// entitlement can know whose row to write. Nothing else in a
+    /// notification identifies our user.
+    ///
+    /// **It cannot be applied retroactively.** A transaction bought without
+    /// it carries none forever, and no later deploy repairs that — see
+    /// `docs/decisions/2026-09-19-subscription-enforcement.md` §5 and §11.
+    ///
+    /// A missing session should be impossible (every screen is behind sign-in)
+    /// but if the session read fails we still let the purchase proceed: taking
+    /// someone's money is not what fails here, and the server-side healing
+    /// path binds a tokenless transaction by verifying its id against Apple.
+    /// Refusing to sell because a keychain read blipped would be the worse
+    /// trade.
+    private func purchaseOptions() async -> Set<Product.PurchaseOption> {
+        guard let userID = await currentUserID() else {
+            Self.log.error("purchasing with no appAccountToken — no session")
+            return []
+        }
+        return [.appAccountToken(userID)]
+    }
+
     /// Returns true when the reader ends up entitled. A user cancelling is
     /// not an error and produces no message.
     @discardableResult
@@ -160,7 +218,7 @@ final class SubscriptionStore: ObservableObject {
         }
         purchaseError = nil
         do {
-            switch try await product.purchase() {
+            switch try await product.purchase(options: await purchaseOptions()) {
             case .success(let verification):
                 if case .verified(let transaction) = verification {
                     await transaction.finish()
