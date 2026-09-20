@@ -261,7 +261,7 @@ surface the app has under 1.4.1, and it is deliberately constrained:
 
   Allowed, because it describes what the reader already wonders and what
   the app keeps: *"if you've wondered whether something you eat is
-  affecting how you sleep, Noticed keeps the record and tells you what
+  affecting how you sleep, Somatic keeps the record and tells you what
   actually held up."*
 
   Not allowed, because each promises resolution: *"find out what's

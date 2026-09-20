@@ -1,7 +1,7 @@
 import Foundation
 import Supabase
 
-/// Counts the days behind the insight gate, so the Noticed tab can say how
+/// Counts the days behind the insight gate, so the noticed tab can say how
 /// much is left instead of "a couple more weeks".
 ///
 /// Three narrow reads of the caller's own rows over the same 30-day window

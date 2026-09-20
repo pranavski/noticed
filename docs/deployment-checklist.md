@@ -146,7 +146,7 @@ Dashboard → Authentication → Providers → Apple:
 5. Settings → delete account → complete the Apple prompt → confirm all
    rows gone and sign-in state cleared; then cancel-path: delete again on
    a second account, dismiss the Apple prompt, deletion must still finish.
-6. Pull to refresh on the Noticed tab twice in a row: the second pull
+6. Pull to refresh on the noticed tab twice in a row: the second pull
    should show "thought it over a few minutes ago" (the 429 throttle),
    not a failure.
 7. Consent, server-side: on an account that tapped "not now", confirm

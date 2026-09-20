@@ -153,7 +153,7 @@ struct CaptureSheet: View {
             // The hour isn't decoration — the insight rules read it — so
             // say so on the entries where it won't have set itself.
             if isBackdated {
-                Text("set the time too — Noticed reads when you ate, not just what.")
+                Text("set the time too — Somatic reads when you ate, not just what.")
                     .font(Font.Soma.margin)
                     .foregroundStyle(Color.inkSoft)
                     .fixedSize(horizontal: false, vertical: true)

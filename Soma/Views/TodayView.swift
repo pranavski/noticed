@@ -242,7 +242,7 @@ private struct HeaderBlock: View {
             }
 
             HStack(spacing: 0) {
-                Text("Noticed")
+                Text("Somatic")
                     .font(Font.Soma.logo)
                     .foregroundStyle(Color.ink)
                 Text(".")

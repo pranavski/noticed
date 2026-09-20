@@ -1,4 +1,4 @@
-# Noticed — TODO
+# Somatic — TODO
 
 Live list. Everything the audit of 2026-09-07 called partially built or
 broken has been fixed in code; what remains is hosting, App Store Connect
@@ -11,9 +11,13 @@ decision created are listed under "From the 2026-09-10 decisions" below.
 ## From the 2026-09-10 decisions
 
 - [x] `parse-meal` on `claude-sonnet-5` — deployed 2026-09-19 (v10).
-- [x] Renamed to Noticed: display name, bundle ID
-      (`com.pranavsurampudi.noticed`), purpose strings, all user-visible
-      copy. Swift types, directories and storage keys deliberately unchanged.
+- [x] Renamed: display name, bundle ID (`com.pranavsurampudi.noticed`),
+      purpose strings, all user-visible copy. Swift types, directories and
+      storage keys deliberately unchanged. **The name became Somatic on
+      2026-09-19** (it was Noticed from 2026-09-10); the bundle id, product
+      id and Pages URLs keep the `noticed` spelling on purpose — they are
+      invisible to users and moving them breaks Sign in with Apple and the
+      hosted privacy policy for no gain.
 - [x] Empty state counts down to the gate instead of "a couple more weeks",
       and distinguishes "not enough yet" from "looked, found nothing"
       (`InsightCoverage`, `InsightCoverageTests`).
@@ -33,9 +37,11 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       `.p8` key task below — the key must be created against the new App ID,
       so doing them separately means making the key twice. A simulator
       `SOMA_PREVIEW=1` run will NOT catch this.
-- [ ] **Trademark and domain check on "Noticed"** — the App Store search
-      check came back clean (1 near-match) but neither of these was run.
-      Do this before anything is filed under the name.
+- [ ] **Trademark, domain and App Store search check on "Somatic"** — none
+      of the three has been run for this name. The 2026-09-10 search that
+      came back clean (1 near-match) was for *Noticed*, which was dropped on
+      2026-09-19; "somatic" is a common word in the wellness/therapy space,
+      so expect collisions. Do this before anything is filed under the name.
 - [x] **Rename the GitHub repo and move the Pages URL.** Done 2026-09-19:
       repo is `pranavski/noticed`; https://pranavski.github.io/noticed/privacy/
       verified 200 before `SomaFeatures.privacyPolicyURL` moved to it. The
@@ -57,8 +63,8 @@ decision created are listed under "From the 2026-09-10 decisions" below.
       `com.pranavsurampudi.noticed.yearly`, $15/yr, 2-week free trial, and
       sign the Paid Applications agreement. Until then the paywall is empty
       in production. Steps in `docs/deployment-checklist.md` §9.
-      **2026-09-19:** group "Noticed" and the product exist (1 year, display
-      name "Noticed, yearly", description trimmed to ASC's 55-char limit:
+      **2026-09-19:** group "Somatic" and the product exist (1 year, display
+      name "Somatic, yearly", description trimmed to ASC's 55-char limit:
       "The nightly engine. Your notebook stays free."), upfront billing in
       all 175 countries. **Blocked:** saving a price errors until the
       Account Holder accepts the updated Developer Program License Agreement
@@ -89,7 +95,7 @@ empty table, universal refusal, and a dead app.
       file meals as written, a subscription reads them into ingredients.
       `SubscribeSheet`, `docs/app-store-connect-copy.md`.
 - [x] **Trial-tail warning.** `TrialTailWarning` + `TrialTailWarningTests`;
-      the Noticed tab carries the shortfall and the cancel path, the kitchen
+      the noticed tab carries the shortfall and the cancel path, the kitchen
       row carries the countdown only (coverage is three network reads).
       In-app only — no notification permission prompt.
 - [ ] **Entitlement table** (`ai_consent`-shaped, owner-can-select, no write

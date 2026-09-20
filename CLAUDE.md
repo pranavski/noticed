@@ -1,8 +1,8 @@
-# Noticed (repo: soma) — Food–Body Record iOS App
+# Somatic (repo: noticed) — Food–Body Record iOS App
 
-Ships as **Noticed**; the code, directories and Swift types still say Soma
+Ships as **Somatic**; the code, directories and Swift types still say Soma
 and deliberately stay that way (see
-`docs/decisions/2026-09-10-positioning-and-pricing.md` §5).
+`docs/decisions/2026-09-19-renamed-to-somatic.md`).
 
 ## What this is
 10-second meal logging for people who cook (voice / typing / one-tap

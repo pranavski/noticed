@@ -130,7 +130,7 @@ struct SettingsView: View {
     ///
     /// A trial counts down here once it is close, so the charge is never a
     /// surprise from this screen either. The fuller notice — how far short of
-    /// the first look you still are — lives on the Noticed tab, which has the
+    /// the first look you still are — lives on the noticed tab, which has the
     /// coverage numbers already loaded; fetching them here would mean three
     /// network reads to fill in a row subtitle.
     private var subscriptionNote: String {
@@ -245,7 +245,7 @@ private struct ContentsList: View {
             Entry(title: "Export",        note: "your data, plainly",     glyph: .knife,  action: actions.onExport),
             Entry(title: "Privacy",       note: "what leaves your phone", glyph: .leaf,   action: actions.onPrivacy),
             Entry(title: "Send feedback", note: "tell us what could be better", glyph: .cherry, action: actions.onFeedback),
-            Entry(title: "About",         note: "what Noticed is, isn't",    glyph: .bowl,   action: actions.onAbout),
+            Entry(title: "About",         note: "what Somatic is, isn't",    glyph: .bowl,   action: actions.onAbout),
             Entry(title: "Sign out",      note: "close the kitchen",      glyph: .knife,  action: actions.onSignOut),
             Entry(title: "Delete account", note: "erase everything, forever", glyph: .knife, action: actions.onDeleteAccount)
         ]
@@ -325,14 +325,14 @@ private struct Footer: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
             InkRule(style: .wavy, color: Color.rule, weight: 1.0)
                 .frame(width: 120)
-            Text("Noticed remembers gently.\nnever shames. never prescribes.")
+            Text("Somatic remembers gently.\nnever shames. never prescribes.")
                 .font(Font.Soma.dishNote)
                 .foregroundStyle(Color.inkSoft)
                 .lineSpacing(3)
 
             // Legal / safety line. Required visible somewhere the user can
             // reasonably reach — Settings footer is the calmest home for it.
-            Text("not medical advice. Noticed surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
+            Text("not medical advice. Somatic surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
                 .font(Font.Soma.margin)
                 .foregroundStyle(Color.inkSoft.opacity(0.85))
                 .lineSpacing(2)

@@ -92,7 +92,7 @@ struct InsightsView: View {
                     // On the screen where the claims live, not only in the
                     // kitchen footer: once cards cite journals, the reader
                     // has to be told here what they are not.
-                    Text("not medical advice. Noticed surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
+                    Text("not medical advice. Somatic surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
                         .font(Font.Soma.margin)
                         .foregroundStyle(Color.inkSoft.opacity(0.85))
                         .lineSpacing(2)
@@ -150,7 +150,7 @@ private struct HeaderBlock: View {
                 .foregroundStyle(Color.inkSoft)
 
             HStack(spacing: 0) {
-                Text("Noticed")
+                Text("Somatic")
                     .font(Font.Soma.logo)
                     .foregroundStyle(Color.ink)
                 Text(".")

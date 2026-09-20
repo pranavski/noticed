@@ -1,19 +1,19 @@
-# Noticed Privacy Policy
+# Somatic Privacy Policy
 
 _Last updated: September 10, 2026_
 
-Noticed is a food–body record. You log meals in about ten seconds, optionally
-connect Apple Health, and Noticed looks for honest, hedged correlations in your
-own data. This policy explains exactly what data Noticed handles, where it goes,
+Somatic is a food–body record. You log meals in about ten seconds, optionally
+connect Apple Health, and Somatic looks for honest, hedged correlations in your
+own data. This policy explains exactly what data Somatic handles, where it goes,
 and how to get it out or delete it.
 
-Noticed is built around three commitments:
+Somatic is built around three commitments:
 
 1. **Your raw health data never leaves your phone.** Only small daily
    summaries sync.
 2. **Your data is yours.** You can export everything as a CSV or delete your
    account — and all of its data — at any time, from inside the app.
-3. **No advertising, no tracking, no selling.** Noticed has no ads, no
+3. **No advertising, no tracking, no selling.** Somatic has no ads, no
    third-party analytics SDKs, and never sells or shares your data for
    marketing.
 
@@ -34,7 +34,7 @@ When you log a meal — by voice, typing, or repeating a past meal — we store:
 
 - what you said or typed (the transcript or text)
 - the parsed result: dish name, estimated calorie and macro **ranges**
-  (Noticed never claims single-number precision), cuisine, and time eaten
+  (Somatic never claims single-number precision), cuisine, and time eaten
 - any corrections you make to a parse
 - optional notes
 
@@ -44,21 +44,21 @@ rows.
 
 ### Apple Health (HealthKit) — optional, read-only
 
-If you connect Apple Health, Noticed reads steps, sleep, resting heart rate,
+If you connect Apple Health, Somatic reads steps, sleep, resting heart rate,
 heart rate variability, body weight, active energy and workouts —
 read-only, never writing anything back.
 
 **Raw HealthKit samples are processed entirely on your device and never
-leave it.** Noticed computes one summary per day (total steps, sleep minutes,
+leave it.** Somatic computes one summary per day (total steps, sleep minutes,
 average resting heart rate, average HRV, weight, active energy burned and
 workout minutes) and syncs only those daily numbers. That's the whole of
 what our servers ever see from Apple Health.
 
-Once connected, Noticed asks iOS to notify it when new Health samples arrive,
+Once connected, Somatic asks iOS to notify it when new Health samples arrive,
 so the daily summary stays current without you having to open the app. The
 work is the same either way: summarise on device, sync the daily numbers.
 
-You can disconnect at any time — in Noticed under Kitchen → HealthKit, or in
+You can disconnect at any time — in Somatic under Kitchen → HealthKit, or in
 iOS Settings → Privacy & Security → Health. Disconnecting stops all further
 reading and syncing; daily summaries already synced stay until you delete
 your account. Health data is never used for advertising and never shared
@@ -71,10 +71,10 @@ your daily summary and used only by the insight engine.
 
 ## Third-party AI: Anthropic's Claude
 
-Noticed sends data to **Anthropic's Claude** for two purposes, and only after
+Somatic sends data to **Anthropic's Claude** for two purposes, and only after
 you have explicitly agreed in the app. Your answer is stored with your
 account as well as on your phone, so the nightly look-back described below
-never runs for someone who has declined. Noticed asks once, before your first
+never runs for someone who has declined. Somatic asks once, before your first
 meal is parsed, and you can withdraw consent at any time in
 **the kitchen → Reading meals**.
 
@@ -82,7 +82,7 @@ meal is parsed, and you can withdraw consent at any time in
 is sent to Claude to be turned into a structured entry (dish name, calorie
 and macro ranges, cuisine).
 
-**2. The nightly look-back.** Once a night, if there is enough data, Noticed
+**2. The nightly look-back.** Once a night, if there is enough data, Somatic
 sends Claude a compact digest of roughly your last 30 days so it can look
 for patterns worth mentioning. That digest contains your recent meals, your
 energy check-ins, and the **daily** Apple Health totals described above —
@@ -102,7 +102,7 @@ In every case:
 Anthropic processes this data as a service provider under its commercial
 terms and does not use it to train models.
 
-If you decline, Noticed keeps working: meals still save, filed exactly as you
+If you decline, Somatic keeps working: meals still save, filed exactly as you
 wrote them with no estimate attached, and you can fill in the details
 yourself with "not quite right?" on any card.
 
@@ -124,16 +124,16 @@ list ships inside the app itself.
 
 ## Photos
 
-Photo meal logging is **not part of this version**. Noticed does not take,
+Photo meal logging is **not part of this version**. Somatic does not take,
 upload, or store meal photos. If that changes, this policy, the App Store
 privacy label, and the in-app disclosure will be updated first.
 
 ## The one piece of shared data: dish-name aliases
 
-When you correct a dish name (say, "chole" → "chana masala"), Noticed may
+When you correct a dish name (say, "chole" → "chana masala"), Somatic may
 record that **name-to-name mapping** in a shared table so the next person
 who types "chole" gets a better parse. This is the only cross-user data in
-Noticed, and it is deliberately minimal:
+Somatic, and it is deliberately minimal:
 
 - it contains only dish names and an optional cuisine tag,
 - it carries **no user identifier, no macros, no health data, and no link
@@ -165,20 +165,20 @@ the standard iOS share sheet. No request forms, no waiting.
 Settings → delete account permanently deletes your account and **all** of
 its data: meals, corrections, daily health summaries, energy check-ins, and
 insights. If you complete the Sign in with Apple prompt during deletion, we
-also revoke Noticed's sign-in token with Apple. Deletion is immediate and
+also revoke Somatic's sign-in token with Apple. Deletion is immediate and
 irreversible; shared dish-name aliases contain nothing linkable to you and
 are unaffected.
 
-## What Noticed doesn't do
+## What Somatic doesn't do
 
 - No advertising, no ad identifiers, no tracking across apps or websites.
 - No selling or renting data. Ever.
-- No calorie targets, goals, or medical advice — Noticed is a record and a
+- No calorie targets, goals, or medical advice — Somatic is a record and a
   set of gentle observations, not a health product making claims.
 
 ## Children
 
-Noticed is not directed at children under 13 (or the equivalent minimum age in
+Somatic is not directed at children under 13 (or the equivalent minimum age in
 your region) and we do not knowingly collect their data.
 
 ## Changes

@@ -15,7 +15,7 @@
     {
       "id" : "21563421",
       "localizations" : [],
-      "name" : "Noticed",
+      "name" : "Somatic",
       "subscriptions" : [
         {
           "adHocOffers" : [],
@@ -32,13 +32,13 @@
           "localizations" : [
             {
               "description" : "The nightly engine. Your notebook, record, export and daily reflections stay free.",
-              "displayName" : "Noticed, yearly",
+              "displayName" : "Somatic, yearly",
               "locale" : "en_US"
             }
           ],
           "productID" : "com.pranavsurampudi.noticed.yearly",
           "recurringSubscriptionPeriod" : "P1Y",
-          "referenceName" : "Noticed yearly",
+          "referenceName" : "Somatic yearly",
           "subscriptionGroupID" : "21563421",
           "type" : "RecurringSubscription"
         }

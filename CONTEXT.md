@@ -1,4 +1,4 @@
-# Noticed
+# Somatic
 
 A food–body record: the reader logs what they ate, the app reads it back to
 them, and a statistical engine occasionally says something honest about the

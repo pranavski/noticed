@@ -230,7 +230,7 @@ struct SubscribeSheet: View {
                    + "renewing itself each year until you cancel it in the "
                    + "App Store."
         } else {
-            renews = "Noticed, yearly — a subscription that renews each year "
+            renews = "Somatic, yearly — a subscription that renews each year "
                    + "until you cancel it in the App Store."
         }
         guard trialAvailable else { return renews }

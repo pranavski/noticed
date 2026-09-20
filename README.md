@@ -1,4 +1,4 @@
-# Noticed
+# Somatic
 
 A food–body record for people who suspect something they eat is affecting
 how they feel. Log a meal in about ten seconds (speak it, type it, or tap a
@@ -7,7 +7,7 @@ engine looks for honest, hedged patterns between what you ate and how your
 body responded. Not a diet app: no goals, no streaks, no calorie targets,
 never medical advice.
 
-The app ships as **Noticed**; the repo, directories and Swift types still say
+The app ships as **Somatic**; the repo, directories and Swift types still say
 `Soma` on purpose — see
 `docs/decisions/2026-09-10-positioning-and-pricing.md`.
 

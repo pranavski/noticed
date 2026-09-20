@@ -41,9 +41,9 @@ jobs:
       - name: Render
         run: |
           mkdir -p _site/privacy
-          pandoc docs/privacy-policy.md -s --metadata title="Soma Privacy Policy" \
+          pandoc docs/privacy-policy.md -s --metadata title="Somatic Privacy Policy" \
             -c ../style.css -o _site/privacy/index.html
-          pandoc site/index.md -s --metadata title="Soma" \
+          pandoc site/index.md -s --metadata title="Somatic" \
             -c style.css -o _site/index.html
           cp site/style.css _site/style.css
       - uses: actions/upload-pages-artifact@v3

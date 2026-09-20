@@ -114,7 +114,7 @@ Two further savings were proposed and then found already in the code:
 $15/yr after Apple's 15%. Roughly 29% gross margin, positive for a normal
 user and near break-even for a heavy one.
 
-## 5. Renamed to Noticed
+## 5. Renamed to Somatic
 
 "Soma" collides with a muscle relaxant, *Brave New World*, a San Francisco
 district and other apps, and wins no search.
@@ -124,14 +124,14 @@ matches or begins with the term:
 
 | candidate | matching apps | note |
 |---|---|---|
-| **Noticed** | **1** | "NOTICED YOU" — not a collision |
+| **Somatic** | **1** | "NOTICED YOU" — not a collision |
 | Mise | 11 | every one a food app; the design system's own direction word is the worst available option |
 | Larder | 11 | meal planners |
 | Vellum | 22 | includes the well-known writing tool |
 | Trace / Margin | 26 / 20 | crowded |
 | Quill / Kept / Tally | 35 / 43 / 62 | saturated |
 
-Shipping as `Noticed — food & body journal`: Apple weights the name field in
+Shipping as `Somatic — food & body journal`: Apple weights the name field in
 search, so the tail does keyword work while the word carries the brand.
 
 **Scope of the rename.** Display name, bundle ID
@@ -148,7 +148,7 @@ verb, so lowercase house style breaks down: *"noticed reads your meal"* parses
 as a verb, not a name. The name is therefore capitalised in body copy even
 though the rest of the voice is lowercase — the standard exception for proper
 nouns. Second, one sentence had to be reworded rather than renamed, because
-"what Noticed notices" is unreadable (`MealCardActions.swift`).
+"what Somatic notices" is unreadable (`MealCardActions.swift`).
 
 Trademark and domain are **not yet checked**.
 
@@ -156,7 +156,7 @@ Trademark and domain are **not yet checked**.
 
 `MIN_MEAL_DAYS` / `MIN_BODY_DAYS` are mirrored client-side in
 `InsightCoverage`, pinned by `InsightCoverageTests` so they cannot drift from
-`digest.ts` silently. The Noticed tab names the shortfall and what is already
+`digest.ts` silently. The noticed tab names the shortfall and what is already
 covered, instead of "a couple more weeks" forever.
 
 It also distinguishes two states the old copy conflated: **before** the gate

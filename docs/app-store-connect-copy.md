@@ -1,4 +1,4 @@
-# Noticed — App Store Connect copy (v1.0)
+# Somatic — App Store Connect copy (v1.0)
 
 Paste-ready text for every free-text field in App Store Connect, written to
 the constraints in `docs/app-store-compliance.md`: no outcome claims, no
@@ -17,7 +17,7 @@ pitch, not a disclaimer bolted to it. See
 
 | Field | Value |
 |---|---|
-| Name | Noticed — food & body journal |
+| Name | Somatic: food and body |
 | Subtitle (30) | what you ate, how you felt |
 | Primary category | Food & Drink |
 | Secondary category | (none) |
@@ -31,23 +31,23 @@ pitch, not a disclaimer bolted to it. See
 
 ## Promotional text (170)
 
-Say what you ate; it's written down in ten seconds. Connect Apple Health if you like. Once there's enough to go on, Noticed tells you what actually held up.
+Say what you ate; it's written down in ten seconds. Connect Apple Health if you like. Once there's enough to go on, Somatic tells you what actually held up.
 
 ## Description (4000)
 
 If you've wondered whether something you eat is affecting how you sleep, how your stomach feels, or where your energy goes — this is a notebook for keeping the record straight, and an engine that is honest about what the record can and cannot show.
 
-Most apps in this category will tell you something confident. Noticed will usually tell you nothing, because for most of what people wonder about themselves there isn't enough evidence yet to say. When it does say something, the number behind it is real.
+Most apps in this category will tell you something confident. Somatic will usually tell you nothing, because for most of what people wonder about themselves there isn't enough evidence yet to say. When it does say something, the number behind it is real.
 
 Say what you ate. "Eggs on sourdough, black coffee." A subscription reads that into ingredients with an estimated calorie range, never a single number, because nobody knows a plate to the calorie. Correct it if it's wrong. Repeat it with one tap tomorrow. Without a subscription the meal is still logged, in your own words, and you can fill in the details by hand.
 
-If you connect Apple Health, Noticed reads daily totals only: steps, sleep, resting heart rate, heart rate variability, weight, active energy and workout minutes. It never writes to Health. The raw readings never leave your phone. Connecting also reads the last 30 days, so that half of the picture is usually complete from day one.
+If you connect Apple Health, Somatic reads daily totals only: steps, sleep, resting heart rate, heart rate variability, weight, active energy and workout minutes. It never writes to Health. The raw readings never leave your phone. Connecting also reads the last 30 days, so that half of the picture is usually complete from day one.
 
-Once a night, when there is enough to go on, Noticed looks across your last month for associations between what you logged and how the days went, and tells you the ones that held up, in one hedged sentence each. Worth watching, not a verdict. No goals, no streaks, no calorie targets, no diet.
+Once a night, when there is enough to go on, Somatic looks across your last month for associations between what you logged and how the days went, and tells you the ones that held up, in one hedged sentence each. Worth watching, not a verdict. No goals, no streaks, no calorie targets, no diet.
 
 It takes seven days with a meal logged before the engine will run at all, and the app tells you how many are left rather than leaving you guessing. A quiet month is a real result, and it says that too.
 
-What Noticed is not: it is not medical advice, it does not diagnose, it does not identify triggers, and it does not tell you what to eat. It shows you your own record and what stands out in it. Talk to a clinician for anything that matters.
+What Somatic is not: it is not medical advice, it does not diagnose, it does not identify triggers, and it does not tell you what to eat. It shows you your own record and what stands out in it. Talk to a clinician for anything that matters.
 
 Privacy, plainly:
 • Sign in with Apple. Hide My Email works.
@@ -60,7 +60,7 @@ iPhone only. Requires iOS 17.
 
 ## Keywords (100)
 
-food diary,bloating,food triggers,sensitivity,elimination,symptom,sleep,energy,voice log,apple health
+food diary,bloating,triggers,sensitivity,elimination,symptom,sleep,energy,voice log,apple health
 
 Chosen against the head terms the incumbents own (`meal log`, `food journal`,
 `calorie counter`) in favour of what this audience actually types. Keywords
@@ -73,7 +73,7 @@ First release.
 
 ## App Review notes
 
-Noticed is a personal food journal with optional, read-only Apple Health correlation. It provides no diagnosis, treatment, dosing or medical guidance; every calorie is a range and every insight is hedged and non-prescriptive. Category is Food & Drink on purpose.
+Somatic is a personal food journal with optional, read-only Apple Health correlation. It provides no diagnosis, treatment, dosing or medical guidance; every calorie is a range and every insight is hedged and non-prescriptive. Category is Food & Drink on purpose.
 
 Sign-in: Sign in with Apple is the only login, and it is required because every record is a server-synced row owned by the account. There is no demo account for that reason. Any Apple ID works, including Hide My Email.
 
@@ -81,7 +81,7 @@ Third-party AI: after sign-in the app shows a one-time consent sheet naming Clau
 
 HealthKit: read-only, seven types, all named in the purpose string. Raw samples are aggregated on device; only daily totals sync. Background delivery runs the same on-device rollup. Nothing is written to Health, and there is no iCloud entitlement.
 
-Insights need seven days on which a meal was logged (plus a body signal, which connecting Apple Health satisfies immediately by reading the last 30 days), so a fresh account shows "keep logging" on the Noticed tab. To see the feature: [attach a 30–60 s screen recording of the Noticed tab on a seeded account]. Pull-to-refresh on that tab runs the engine on demand; a second pull within ten minutes is rate-limited with a friendly message, not an error.
+Insights need seven days on which a meal was logged (plus a body signal, which connecting Apple Health satisfies immediately by reading the last 30 days), so a fresh account shows "keep logging" on the noticed tab. To see the feature: [attach a 30–60 s screen recording of the noticed tab on a seeded account]. Pull-to-refresh on that tab runs the engine on demand; a second pull within ten minutes is rate-limited with a friendly message, not an error.
 
 Account deletion: kitchen (Settings) → delete account. It removes every row and revokes the Sign in with Apple token.
 
@@ -116,7 +116,7 @@ Not collected: audio, photos, location, usage data, purchases, contacts, browsin
 
 Order and caption. Captions are optional; if used, keep them to these.
 
-1. Noticed tab with two or three insight cards on a seeded account. Caption: "patterns in your own record, hedged."
+1. noticed tab with two or three insight cards on a seeded account. Caption: "patterns in your own record, hedged."
 2. Today with a few meals and calorie ranges visible. Caption: "say it, it's written."
 3. Capture sheet mid-dictation. Caption: "ten seconds, by voice or by hand."
 4. Today with the compare-yesterday overlay. Caption: "yesterday, laid over today."

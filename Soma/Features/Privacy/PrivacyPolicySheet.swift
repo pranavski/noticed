@@ -25,7 +25,7 @@ struct PrivacyPolicySheet: View {
                                 .font(Font.Soma.sectionTag)
                                 .tracking(3)
                                 .foregroundStyle(Color.persimmon)
-                            Text("what Noticed does with your data.")
+                            Text("what Somatic does with your data.")
                                 .font(Font.Soma.pullQuote)
                                 .foregroundStyle(Color.ink)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -77,27 +77,27 @@ struct PrivacyPolicySheet: View {
         ),
         Section(
             title: "your account",
-            text: "signing in with Apple gives Noticed a stable, app-scoped identifier, and your email address only if you choose to share it (Hide My Email works fine). it links your meals to your account and is used for nothing else."
+            text: "signing in with Apple gives Somatic a stable, app-scoped identifier, and your email address only if you choose to share it (Hide My Email works fine). it links your meals to your account and is used for nothing else."
         ),
         Section(
             title: "meal logs",
-            text: "Noticed stores what you said or typed, the parsed result (dish name, estimated calorie and macro ranges, cuisine, time eaten), any corrections you make, and optional notes. rows live in a Supabase database behind row-level security — only your signed-in account can read them."
+            text: "Somatic stores what you said or typed, the parsed result (dish name, estimated calorie and macro ranges, cuisine, time eaten), any corrections you make, and optional notes. rows live in a Supabase database behind row-level security — only your signed-in account can read them."
         ),
         Section(
             title: "apple health — optional, read-only",
-            text: "if you connect it, Noticed reads steps, sleep, resting heart rate, HRV, weight, active energy and workouts. it never writes anything back. the raw samples are processed on your device and never leave it: Noticed computes one summary per day and syncs only those numbers. disconnect any time in iOS Settings → Privacy & Security → Health."
+            text: "if you connect it, Somatic reads steps, sleep, resting heart rate, HRV, weight, active energy and workouts. it never writes anything back. the raw samples are processed on your device and never leave it: Somatic computes one summary per day and syncs only those numbers. disconnect any time in iOS Settings → Privacy & Security → Health."
         ),
         Section(
             title: "third-party AI — Anthropic's Claude",
-            text: "two things go to Claude, from Noticed's server rather than your phone, and only after you've agreed. first: the text of a meal you log, so it can be parsed into a structured entry. second: once a night, a compact summary of your recent meals, energy check-ins and daily health totals, so it can look for patterns. your answer is kept with your account, so the nightly look-back never runs unless you've said yes. no name, no email, no account id, no raw health samples, and no audio. nothing travels past Anthropic. Anthropic processes this as a service provider and does not train models on it. you can withdraw consent in the kitchen at any time — logging keeps working — meals are filed as you wrote them, and you fill in the details yourself."
+            text: "two things go to Claude, from Somatic's server rather than your phone, and only after you've agreed. first: the text of a meal you log, so it can be parsed into a structured entry. second: once a night, a compact summary of your recent meals, energy check-ins and daily health totals, so it can look for patterns. your answer is kept with your account, so the nightly look-back never runs unless you've said yes. no name, no email, no account id, no raw health samples, and no audio. nothing travels past Anthropic. Anthropic processes this as a service provider and does not train models on it. you can withdraw consent in the kitchen at any time — logging keeps working — meals are filed as you wrote them, and you fill in the details yourself."
         ),
         Section(
             title: "insights",
-            text: "computed from your data alone, always hedged, never prescriptive, never medical advice. Noticed performs no research and never pools your data with anyone else's."
+            text: "computed from your data alone, always hedged, never prescriptive, never medical advice. Somatic performs no research and never pools your data with anyone else's."
         ),
         Section(
             title: "the one shared thing: dish names",
-            text: "when you correct a dish name (\u{201C}chole\u{201D} → \u{201C}chana masala\u{201D}), Noticed may record that name-to-name mapping so the next person's parse is better. it carries no user identifier, no macros, no health data, and no link back to you."
+            text: "when you correct a dish name (\u{201C}chole\u{201D} → \u{201C}chana masala\u{201D}), Somatic may record that name-to-name mapping so the next person's parse is better. it carries no user identifier, no macros, no health data, and no link back to you."
         ),
         Section(
             title: "who else sees anything",
@@ -105,11 +105,11 @@ struct PrivacyPolicySheet: View {
         ),
         Section(
             title: "export and deletion",
-            text: "the kitchen has an export row that builds a spreadsheet of every meal on demand, and a delete-account row that permanently removes your account and all of its data — meals, corrections, daily summaries, check-ins, insights. if you complete the Apple prompt during deletion, Noticed also revokes its sign-in token with Apple. deletion is immediate and irreversible."
+            text: "the kitchen has an export row that builds a spreadsheet of every meal on demand, and a delete-account row that permanently removes your account and all of its data — meals, corrections, daily summaries, check-ins, insights. if you complete the Apple prompt during deletion, Somatic also revokes its sign-in token with Apple. deletion is immediate and irreversible."
         ),
         Section(
             title: "children",
-            text: "Noticed isn't directed at children under 13, or the equivalent minimum age where you live, and doesn't knowingly collect their data."
+            text: "Somatic isn't directed at children under 13, or the equivalent minimum age where you live, and doesn't knowingly collect their data."
         ),
         Section(
             title: "changes",
