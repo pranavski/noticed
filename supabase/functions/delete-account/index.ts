@@ -141,11 +141,27 @@ async function revokeAppleToken(authorizationCode: string): Promise<void> {
       grant_type: "authorization_code",
     }),
   });
-  if (!tokenRes.ok) return;
+  // Apple answers a bad key, key id or client id here, not at revoke. Say so:
+  // a silent return looks identical to success in the logs, which is how a
+  // broken revoke ships unnoticed. Bodies are Apple's error codes
+  // (invalid_client, invalid_grant), never the user's code or our secret.
+  if (!tokenRes.ok) {
+    console.error(
+      `delete-account: Apple token exchange failed — ${tokenRes.status} ${await tokenRes.text()}. ` +
+      "Rows are deleted, but Apple was NOT told. Check APPLE_CLIENT_ID / APPLE_KEY_ID / APPLE_PRIVATE_KEY.",
+    );
+    return;
+  }
   const tokens: { refresh_token?: string } = await tokenRes.json();
-  if (!tokens.refresh_token) return;
+  if (!tokens.refresh_token) {
+    console.error(
+      "delete-account: Apple token exchange returned no refresh_token. " +
+      "Rows are deleted, but Apple was NOT told.",
+    );
+    return;
+  }
 
-  await fetch("https://appleid.apple.com/auth/revoke", {
+  const revokeRes = await fetch("https://appleid.apple.com/auth/revoke", {
     method: "POST",
     headers,
     body: form({
@@ -155,6 +171,12 @@ async function revokeAppleToken(authorizationCode: string): Promise<void> {
       token_type_hint: "refresh_token",
     }),
   });
+  if (!revokeRes.ok) {
+    console.error(
+      `delete-account: Apple revoke failed — ${revokeRes.status} ${await revokeRes.text()}. ` +
+      "Rows are deleted, but the token is still live at Apple.",
+    );
+  }
 }
 
 const PHOTO_BUCKET = "meal-photos";
