@@ -18,15 +18,23 @@ final class InsightsViewModel: ObservableObject {
     @Published private(set) var isGenerating = false
     @Published private(set) var errorText: String?
 
+    /// How far the log is from the gate, for the empty state. Nil until the
+    /// first successful read — the copy falls back to the old, vaguer
+    /// sentence rather than guessing at a number it does not have.
+    @Published private(set) var coverage: InsightCoverage?
+
     private let repository: InsightsRepository
     private let reflectionsRepository: ReflectionsRepository
+    private let coverageRepository: InsightCoverageRepository
 
     init(
         repository: InsightsRepository = InsightsRepository(),
-        reflectionsRepository: ReflectionsRepository = ReflectionsRepository()
+        reflectionsRepository: ReflectionsRepository = ReflectionsRepository(),
+        coverageRepository: InsightCoverageRepository = InsightCoverageRepository()
     ) {
         self.repository = repository
         self.reflectionsRepository = reflectionsRepository
+        self.coverageRepository = coverageRepository
         #if DEBUG
         if Self.isPreview {
             // SOMA_PREVIEW_EMPTY holds the feed empty so headless runs can
@@ -35,6 +43,11 @@ final class InsightsViewModel: ObservableObject {
             // hardest to reach with real data.
             if ProcessInfo.processInfo.environment["SOMA_PREVIEW_EMPTY"] != "1" {
                 insights = Self.ranked(InsightSampleData.feed)
+            } else {
+                // Five logged days, HealthKit connected — the exact state a
+                // real account is in mid-first-week, and the one the
+                // countdown copy exists for.
+                coverage = InsightCoverage(mealDays: 5, bodyDays: 30)
             }
             reflections = InsightSampleData.reflections
         }
@@ -51,9 +64,19 @@ final class InsightsViewModel: ObservableObject {
         insights.isEmpty && !reflections.isEmpty
     }
 
-    /// Honest about *why* nothing is here — hedged, never shaming.
+    /// Honest about *why* nothing is here — hedged, never shaming, and
+    /// specific once we know the numbers. See `InsightCoverage.note`.
     var emptyStateNote: String {
-        "a couple more weeks of meals and quiet check-ins give patterns room to show. connecting HealthKit (in kitchen) adds sleep and steps to the picture."
+        coverage?.note
+            ?? "a couple more weeks of meals and quiet check-ins give patterns room to show. connecting HealthKit (in kitchen) adds sleep and steps to the picture."
+    }
+
+    /// The headline above the note. Past the gate, "patterns need a little
+    /// more to go on" is simply untrue — there is enough, and nothing held.
+    var emptyStateTitle: String {
+        (coverage?.isSufficient ?? false)
+            ? "nothing has stood out yet."
+            : "patterns need a little more to go on."
     }
 
     func load() async {
@@ -84,14 +107,36 @@ final class InsightsViewModel: ObservableObject {
             // not mean silence in the logs.
             Self.log.error("reflections fetch failed: \(String(describing: error), privacy: .public)")
         }
+        do {
+            coverage = try await coverageRepository.fetchCoverage()
+        } catch {
+            // Same bargain as reflections: without it the empty state falls
+            // back to the vaguer sentence, which is still true.
+            Self.log.error("coverage fetch failed: \(String(describing: error), privacy: .public)")
+        }
         isLoading = false
     }
 
+    /// Set when a pull-to-refresh was declined for want of a subscription.
+    /// The view turns this into the paywall; the view model does not present
+    /// anything itself.
+    @Published var needsSubscription = false
+
     /// Pull-to-refresh: ask the engine to think, then re-read the feed.
     /// A generation failure is soft — whatever is already surfaced stays.
-    func refresh() async {
+    ///
+    /// `canGenerate` is the entitlement, passed in rather than read here so
+    /// the view model stays testable without StoreKit. Re-reading the feed
+    /// still happens for a free reader: their existing findings, reflections
+    /// and coverage are all theirs, and only the request to think is gated.
+    func refresh(canGenerate: Bool = true) async {
         guard !Self.isPreview else { return }
         errorText = nil
+        guard canGenerate else {
+            await load()
+            needsSubscription = true
+            return
+        }
         isGenerating = true
         var generationError: Error?
         do {
@@ -130,7 +175,7 @@ final class InsightsViewModel: ObservableObject {
             : "your notes didn't come back just now — pull to try again."
     }
 
-    private static let log = Logger(subsystem: "com.pranavsurampudi.soma", category: "insights")
+    private static let log = Logger(subsystem: "com.pranavsurampudi.noticed", category: "insights")
 
     /// Feed order: strongest signals first, newest first within a level.
     static func ranked(_ items: [Insight]) -> [Insight] {

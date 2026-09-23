@@ -16,6 +16,11 @@ updated 2025-11-13 (the "third-party AI" revision of 5.1.2(i)) and the
 > said otherwise are closed. What remains is App Store Connect, hosting
 > and secrets — see §6.
 >
+> **2026-09-19 subscription pass.** The paywall was audited against
+> 3.1.2 for the first time — the guideline had no section in this
+> document at all. One real gap: no renewal disclosure and neither
+> required link. Closed in code the same day; see §1 → 3.1.2.
+>
 > **2026-08-02 remediation pass.** The five code-side blockers from the
 > 2026-07-19 audit are closed: the app icon exists, the privacy policy
 > is in the app, third-party AI has a named pre-first-use consent gate that
@@ -244,6 +249,32 @@ surface the app has under 1.4.1, and it is deliberately constrained:
   "clinically proven", "evidence-based nutrition", or name any journal.
   The citations are context for a personal observation, and marketing copy
   that inverts that framing is what would attract a 1.4.1 rejection
+- [ ] **ASC** — **A symptom may be named as the reader's question, never as
+  something the app addresses.** Added when the listing was repointed at
+  people who suspect food is affecting how they feel (see
+  `docs/decisions/2026-09-10-positioning-and-pricing.md`). The existing bans
+  cover imperatives and outcome claims and do not cover this: "find your
+  trigger", "identify what's causing your bloating", "get to the bottom of
+  your symptoms" contain no imperative and promise no outcome, yet each
+  asserts a diagnostic capability the app does not have and 1.4.1 reads as
+  a medical claim.
+
+  Allowed, because it describes what the reader already wonders and what
+  the app keeps: *"if you've wondered whether something you eat is
+  affecting how you sleep, Somatic keeps the record and tells you what
+  actually held up."*
+
+  Not allowed, because each promises resolution: *"find out what's
+  triggering your symptoms"*, *"discover your food sensitivities"*,
+  *"identify what's causing it"*, *"get answers about your gut"*.
+
+  The test to apply to any new sentence: does it name a symptom in the
+  position of something the app resolves? If the verb attached to the
+  symptom is the app's (find, identify, discover, diagnose, fix, solve,
+  reveal) rather than the reader's (wonder, suspect, notice, ask), rewrite
+  it. This governs the description, subtitle, promotional text, screenshot
+  captions and the support site equally. Keywords are exempt — a keyword is
+  a search token, not a sentence, and asserts nothing
 
 **Reviewer-facing summary, if asked:** Soma does not give nutrition advice.
 It finds statistical associations in a user's own food and body logs, and
@@ -257,6 +288,46 @@ therapeutic claims.
   Health app — compliant
 - [x] Only public APIs (SwiftUI, HealthKit, Speech, AVFoundation,
   AuthenticationServices, PhotosUI)
+
+### 3.1.2 — Auto-renewable subscriptions
+
+One product: `com.pranavsurampudi.noticed.yearly`, $15/year, 14-day free
+trial. 3.1.2 requires the **paywall itself** — not a page it links to — to
+name what is sold, for how long, at what price, that it renews on its own,
+and to carry working links to the terms of use (EULA) and the privacy
+policy. Everything below is `Soma/Features/Subscription/SubscribeSheet.swift`.
+
+- [x] Title and length — the product's StoreKit `displayName` and "a year"
+- [x] Price — `product.displayPrice`, localized. Never hardcoded: "$15" is
+  wrong in every non-US storefront, and a wrong price on a paywall is a
+  rejection on its own
+- [x] **Renewal disclosed** — `renewalSentence` says it renews itself each
+  year until cancelled in the App Store, and, when the introductory offer
+  is available, that the 14 free days become the first paid year. This was
+  the gap found 2026-09-19: the sheet said "cancel any time" but never said
+  *renewing*
+- [x] **Terms of use link** — `SomaFeatures.termsOfUseURL`, Apple's standard
+  EULA. That is the agreement actually in force while the App Store Connect
+  "License Agreement" field is left at Apple's standard, and it cannot 404
+  the way a page of ours would while the Pages site moves with the repo
+  rename
+- [x] **Privacy policy link** — opens the in-app `PrivacyPolicySheet`, so it
+  is functional with no network at all
+- [x] Restore path on the same sheet (3.1.1)
+- [x] Trial honesty beyond the guideline: `TrialTailWarning` tells a
+  trialist who is still short of the coverage gate, before the charge lands,
+  that they have not seen the thing they are about to pay for
+- [ ] **ASC** — leave the License Agreement field at Apple's standard EULA,
+  or file a custom one and move `SomaFeatures.termsOfUseURL` with it in the
+  same change
+- [ ] **ASC** — the product must exist and the Paid Applications agreement
+  must be signed, or the paywall shows "—" and a disabled button in
+  production with no error (deployment checklist §9)
+
+`SubscriptionStateTests.testPaywallCarriesTermsAndPrivacyLinks` pins the two
+links, because `SubscribeSheet` renders each only when its URL parses — a
+typo would drop a required link silently and the first sign of it would be a
+rejection.
 
 ### 4.8 — Login Services
 
@@ -466,12 +537,13 @@ new required-reason API it adopts lands on the app manifest.
 | App icon missing — cannot archive | `DesignAssets/master/app-icon-1024.png` + `build-assets.sh`, which crops the master's transparent margin and flattens it; a flattened RGB 1024 PNG is wired into the appiconset and verified present in the built bundle |
 | HealthKit "connected" flag survived sign-out, so a second account on the same phone auto-synced health data | `HealthKitSync.clearConnected()` + `stopObserving()` on sign-out |
 | Consent enforced only on the phone; the nightly cron sent declined users' data to Anthropic anyway (found 2026-09-07) | `ai_consent` table + `AIConsentRepository`; `generate-insights` checks it before any model call; the cron fan-out joins on it |
+| Paywall carried price, period and a restore path but never the word *renewing*, and no terms or privacy link — a 3.1.2 rejection (found 2026-09-19) | `SubscribeSheet` now carries the renewal sentence, the trial-to-charge sentence, and links to Apple's standard EULA (`SomaFeatures.termsOfUseURL`) and the in-app policy. See §1 → 3.1.2 |
 | Consent sheet listed five daily totals; the digest carries seven | Sheet now names active energy and workout minutes too |
 | No in-app way to stop HealthKit syncing — 5.1.1(v) expects the user to be able to withdraw what they granted | "disconnect" in `HealthKitSheet` stops observers and background delivery; copy states that already-synced summaries remain until account deletion |
 
 ### Still open — not closeable in code
 
-- [x] **LEGAL** — Policy hosted at https://pranavski.github.io/soma/privacy/
+- [x] **LEGAL** — Policy hosted at https://pranavski.github.io/noticed/privacy/
   (GitHub Pages, published from `docs/privacy-policy.md` by
   `.github/workflows/pages.yml`). `privacyPolicyIsHosted` is true, so the
   sheet now shows the web link alongside the full text (2026-09-08)
@@ -486,6 +558,8 @@ new required-reason API it adopts lands on the app manifest.
   declared; there is no photo path in the app
 - [ ] **ASC** — Age-rating questionnaire; Review Notes stating Soma is a
   journal with no diagnosis/treatment/dosing
+- [ ] **ASC** — Leave the License Agreement field at Apple's standard
+  EULA; `SomaFeatures.termsOfUseURL` links to exactly that document
 - [ ] **ASC** — Screenshots. They must not show photo logging (it's off) and
   must avoid outcome claims ("lose weight", "improve your metabolism")
 - [ ] **CODE (verify at archive)** — Generate the Xcode privacy report and

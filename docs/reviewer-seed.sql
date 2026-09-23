@@ -1,11 +1,11 @@
 -- Reviewer seed: thirty days of meals, check-ins and daily health totals
--- for ONE account, so the Noticed tab has something to show.
+-- for ONE account, so the noticed tab has something to show.
 --
 -- Why this exists: generate-insights needs ~7 meal days and ~7 body days
 -- before it scores anything (digest.ts MIN_MEAL_DAYS / MIN_BODY_DAYS), and
 -- App Review tests on a fresh account. Sign-in is Apple-only, so there is
 -- no demo login to hand over; instead, seed your own account, record the
--- Noticed tab, and attach the video to the submission (see
+-- noticed tab, and attach the video to the submission (see
 -- docs/app-store-connect-copy.md → App Review notes).
 --
 -- What it plants: a real pattern the engine can find. Dinner alternates
@@ -27,7 +27,7 @@
 -- How to run (Supabase SQL editor, or `supabase db query -f`):
 --   1. set v_email (or v_user directly) and v_tz below
 --   2. run
---   3. either pull-to-refresh on the Noticed tab, or
+--   3. either pull-to-refresh on the noticed tab, or
 --        curl -X POST https://<ref>.supabase.co/functions/v1/generate-insights \
 --          -H "Authorization: Bearer $INSIGHTS_CRON_SECRET" \
 --          -H "Content-Type: application/json" -d '{"user_id":"<uuid>"}'

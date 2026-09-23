@@ -3,6 +3,7 @@ import SwiftUI
 struct SettingsView: View {
     @EnvironmentObject private var session: SessionStore
     @EnvironmentObject private var disclosure: AIDisclosure
+    @EnvironmentObject private var subscriptions: SubscriptionStore
 
     @State private var showHealthKit = false
     @State private var showAbout = false
@@ -11,6 +12,15 @@ struct SettingsView: View {
     @State private var showDeleteAccount = false
     @State private var showPrivacy = false
     @State private var showAIConsent = false
+    @State private var showSubscribe = {
+        #if DEBUG
+        // Same family as TodayView's SOMA_PREVIEW_SHEET: a headless run can
+        // open the paywall for a screenshot without tapping through.
+        return ProcessInfo.processInfo.environment["SOMA_PREVIEW_SHEET"] == "subscribe"
+        #else
+        return false
+        #endif
+    }()
     @State private var exportURL: URL?
     @State private var isExporting = false
     @State private var exportError: String?
@@ -80,6 +90,12 @@ struct SettingsView: View {
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
         }
+        .sheet(isPresented: $showSubscribe) {
+            SubscribeSheet()
+                .environmentObject(subscriptions)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        }
         .sheet(item: Binding(
             get: { exportURL.map(ExportItem.init) },
             set: { newValue in exportURL = newValue?.url }
@@ -93,6 +109,8 @@ struct SettingsView: View {
             onHealthKit:    { showHealthKit = true },
             healthKitNote:  healthKitNote,
             onCheckin:      { showCheckin = true },
+            onSubscription: { showSubscribe = true },
+            subscriptionNote: subscriptionNote,
             onAIConsent:    { showAIConsent = true },
             aiConsentNote:  disclosure.hasConsented
                             ? "Claude reads your meals · on"
@@ -104,6 +122,42 @@ struct SettingsView: View {
             onDeleteAccount:{ showDeleteAccount = true },
             onSignOut:      { Task { await session.signOut() } }
         )
+    }
+
+    /// Says where the subscription actually stands, in the app's own terms
+    /// rather than the App Store's. A lapsed reader is told what still
+    /// works, not what they have lost.
+    ///
+    /// A trial counts down here once it is close, so the charge is never a
+    /// surprise from this screen either. The fuller notice — how far short of
+    /// the first look you still are — lives on the noticed tab, which has the
+    /// coverage numbers already loaded; fetching them here would mean three
+    /// network reads to fill in a row subtitle.
+    private var subscriptionNote: String {
+        switch subscriptions.state {
+        case .free:
+            return "off · the notebook still works"
+        case .trial(let expires):
+            guard let expires, let days = Self.trialDaysLeft(expires) else {
+                return "on · in the first 14 days"
+            }
+            switch days {
+            case 0:  return "on · trial ends today"
+            case 1:  return "on · trial ends tomorrow"
+            default: return "on · \(days) days left in the trial"
+            }
+        case .subscribed:
+            return "on · looking every night"
+        }
+    }
+
+    /// Whole days left, rounded up, or nil when there is still plenty of
+    /// trial to run (or none at all) and the plain copy reads better.
+    /// Mirrors `TrialTailWarning`'s arithmetic.
+    private static func trialDaysLeft(_ expires: Date, now: Date = Date()) -> Int? {
+        guard expires > now else { return nil }
+        let days = Int(ceil(expires.timeIntervalSince(now) / 86_400))
+        return days <= TrialTailWarning.noticeWindowDays ? days : nil
     }
 
     /// The row used to read "sleep, steps, energy" whether or not anything
@@ -157,6 +211,8 @@ private struct ContentsList: View {
         var onHealthKit: () -> Void
         var healthKitNote: String
         var onCheckin: () -> Void
+        var onSubscription: () -> Void
+        var subscriptionNote: String
         var onAIConsent: () -> Void
         var aiConsentNote: String
         var onExport: () -> Void
@@ -184,11 +240,12 @@ private struct ContentsList: View {
         [
             Entry(title: "HealthKit",     note: actions.healthKitNote,    glyph: .sprig,  action: actions.onHealthKit),
             Entry(title: "Check-in",      note: "today, or a day you missed", glyph: .cherry, action: actions.onCheckin),
+            Entry(title: "The nightly engine", note: actions.subscriptionNote, glyph: .sprig, action: actions.onSubscription),
             Entry(title: "Reading meals", note: actions.aiConsentNote,    glyph: .lemon,  action: actions.onAIConsent),
             Entry(title: "Export",        note: "your data, plainly",     glyph: .knife,  action: actions.onExport),
             Entry(title: "Privacy",       note: "what leaves your phone", glyph: .leaf,   action: actions.onPrivacy),
             Entry(title: "Send feedback", note: "tell us what could be better", glyph: .cherry, action: actions.onFeedback),
-            Entry(title: "About",         note: "what soma is, isn't",    glyph: .bowl,   action: actions.onAbout),
+            Entry(title: "About",         note: "what Somatic is, isn't",    glyph: .bowl,   action: actions.onAbout),
             Entry(title: "Sign out",      note: "close the kitchen",      glyph: .knife,  action: actions.onSignOut),
             Entry(title: "Delete account", note: "erase everything, forever", glyph: .knife, action: actions.onDeleteAccount)
         ]
@@ -268,14 +325,14 @@ private struct Footer: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
             InkRule(style: .wavy, color: Color.rule, weight: 1.0)
                 .frame(width: 120)
-            Text("soma remembers gently.\nnever shames. never prescribes.")
+            Text("Somatic remembers gently.\nnever shames. never prescribes.")
                 .font(Font.Soma.dishNote)
                 .foregroundStyle(Color.inkSoft)
                 .lineSpacing(3)
 
             // Legal / safety line. Required visible somewhere the user can
             // reasonably reach — Settings footer is the calmest home for it.
-            Text("not medical advice. soma surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
+            Text("not medical advice. Somatic surfaces patterns, not diagnoses. talk to a clinician for anything that matters.")
                 .font(Font.Soma.margin)
                 .foregroundStyle(Color.inkSoft.opacity(0.85))
                 .lineSpacing(2)

@@ -5,6 +5,9 @@ import UIKit
 struct SomaApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @StateObject private var session = SessionStore()
+    /// Owned at the app level so the entitlement is read once per launch and
+    /// the `Transaction.updates` listener outlives any individual screen.
+    @StateObject private var subscriptions = SubscriptionStore()
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
@@ -17,6 +20,7 @@ struct SomaApp: App {
         WindowGroup {
             RootView()
                 .environmentObject(session)
+                .environmentObject(subscriptions)
         }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active, session.isSignedIn else { return }

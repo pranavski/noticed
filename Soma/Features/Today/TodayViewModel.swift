@@ -139,10 +139,14 @@ final class TodayViewModel: ObservableObject {
     /// `eatenAt` is when the food happened, not when it was written down —
     /// the capture sheet's "when" control can put it earlier today, or on an
     /// earlier day entirely.
+    /// `canParseMeals` is the entitlement, handed down from the view rather
+    /// than read here — same reason `refresh(canGenerate:)` takes it on
+    /// `InsightsViewModel`: this stays testable without StoreKit.
     func submit(
         transcript: String,
         source: Meal.Source = .voice,
-        eatenAt: Date = Date()
+        eatenAt: Date = Date(),
+        canParseMeals: Bool
     ) async {
         let trimmed = transcript.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
@@ -154,6 +158,7 @@ final class TodayViewModel: ObservableObject {
                 transcript: trimmed,
                 source: source,
                 eatenAt: eatenAt,
+                canParseMeals: canParseMeals,
                 onInserted: { await self.load() }
             )
         } catch {

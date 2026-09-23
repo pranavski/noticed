@@ -20,7 +20,7 @@ struct SignInView: View {
                         .foregroundStyle(Color.inkSoft)
 
                     HStack(spacing: 0) {
-                        Text("Soma")
+                        Text("Somatic")
                             .font(Font.Soma.logo)
                             .foregroundStyle(Color.ink)
                         Text(".")

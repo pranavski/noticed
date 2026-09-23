@@ -2,6 +2,20 @@ import SwiftUI
 
 struct TodayView: View {
     @StateObject private var vm = TodayViewModel()
+    @EnvironmentObject private var subscriptions: SubscriptionStore
+
+    /// Whether a meal logged right now may be read into ingredients.
+    ///
+    /// `isLoading` counts as entitled, matching `InsightsView`: a subscriber
+    /// who logs a meal in the second before the first entitlement read lands
+    /// must not have it filed unparsed, which is not something they could
+    /// undo without retyping it. A free reader can win that race once per
+    /// launch and get one parse; `parse-meal` makes the decision that costs
+    /// money, and this one only decides what the app offers.
+    private var canParseMeals: Bool {
+        subscriptions.isLoading || subscriptions.state.canParseMeals
+    }
+
     /// Same family as showCheckin below: a headless simulator run can open
     /// the ORDER UP ticket for a screenshot.
     @State private var showCapture: Bool = {
@@ -119,7 +133,14 @@ struct TodayView: View {
                 recentDishes: vm.recentDishes,
                 onSubmit: { transcript, source, eatenAt in
                     showCapture = false
-                    Task { await vm.submit(transcript: transcript, source: source, eatenAt: eatenAt) }
+                    Task {
+                        await vm.submit(
+                            transcript: transcript,
+                            source: source,
+                            eatenAt: eatenAt,
+                            canParseMeals: canParseMeals
+                        )
+                    }
                 },
                 onRepeat: { dish, eatenAt in
                     showCapture = false
@@ -221,7 +242,7 @@ private struct HeaderBlock: View {
             }
 
             HStack(spacing: 0) {
-                Text("Soma")
+                Text("Somatic")
                     .font(Font.Soma.logo)
                     .foregroundStyle(Color.ink)
                 Text(".")

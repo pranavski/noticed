@@ -156,7 +156,7 @@ struct FeedbackSheet: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             InkRule(style: .wavy, color: Color.rule, weight: 1.0)
                 .frame(width: 100)
-            Text("your note is stored privately in your account — visible to you and to the soma team, no one else.")
+            Text("your note is stored privately in your account — visible to you and to the Somatic team, no one else.")
                 .font(Font.Soma.margin)
                 .foregroundStyle(Color.inkSoft)
                 .lineSpacing(3)

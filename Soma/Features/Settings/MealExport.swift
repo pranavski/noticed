@@ -60,7 +60,7 @@ enum MealExport {
             out += fields.joined(separator: ",") + "\n"
         }
 
-        let fname = "soma-meals-\(SupabaseDates.localDay(Date())).csv"
+        let fname = "noticed-meals-\(SupabaseDates.localDay(Date())).csv"
         let url = FileManager.default.temporaryDirectory.appendingPathComponent(fname)
         try out.data(using: .utf8)?.write(to: url, options: .atomic)
         return url

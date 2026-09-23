@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// The "what Soma is, isn't" sheet. Static copy; sets the ground rules
+/// The "what Somatic is, isn't" sheet. Static copy; sets the ground rules
 /// for the user (no goals, no calorie targets, hedged insights).
 struct AboutSheet: View {
     @Environment(\.dismiss) private var dismiss
@@ -12,7 +12,7 @@ struct AboutSheet: View {
             ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: Theme.Spacing.l) {
                     HStack {
-                        Text("Soma.")
+                        Text("Somatic.")
                             .font(Font.Soma.logo)
                             .foregroundStyle(Color.ink)
                         Spacer()
@@ -24,7 +24,7 @@ struct AboutSheet: View {
 
                     AboutSection(
                         title: "what it is",
-                        text: "a quiet food–body record. log a meal in ten seconds. each night — or when you pull to refresh — soma looks over your last few weeks and surfaces a few hedged patterns from your own data, if there are any worth watching. before there's enough to go on, it just describes what's written down."
+                        text: "a quiet food–body record. log a meal in ten seconds. each night — or when you pull to refresh — Somatic looks over your last few weeks and surfaces a few hedged patterns from your own data, if there are any worth watching. before there's enough to go on, it just describes what's written down."
                     )
                     AboutSection(
                         title: "what it isn't",

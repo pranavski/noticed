@@ -85,7 +85,7 @@ extension View {
             Button("take it off", role: .destructive) { onConfirm(meal) }
             Button("keep it", role: .cancel) { pending.wrappedValue = nil }
         } message: { _ in
-            Text("it stops counting toward what soma notices. there's no undo.")
+            Text("it stops counting toward what gets noticed. there's no undo.")
         }
     }
 }

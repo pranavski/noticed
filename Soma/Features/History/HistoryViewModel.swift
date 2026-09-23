@@ -150,7 +150,14 @@ final class HistoryViewModel: ObservableObject {
     ///
     /// The month reloads rather than the day: a new row changes the ledger's
     /// glyph strip too, and there's no cheaper query that keeps both honest.
-    func log(transcript: String, source: Meal.Source, eatenAt: Date) async {
+    /// `canParseMeals` is the entitlement, handed down from the view — see
+    /// the note on `TodayViewModel.submit`.
+    func log(
+        transcript: String,
+        source: Meal.Source,
+        eatenAt: Date,
+        canParseMeals: Bool
+    ) async {
         let trimmed = transcript.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         errorText = nil
@@ -161,6 +168,7 @@ final class HistoryViewModel: ObservableObject {
                 transcript: trimmed,
                 source: source,
                 eatenAt: eatenAt,
+                canParseMeals: canParseMeals,
                 onInserted: { await self.load() }
             )
         } catch {

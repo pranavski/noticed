@@ -12,15 +12,34 @@ enum SomaFeatures {
     /// this resolves.
     ///
     /// Published by `.github/workflows/pages.yml` from
-    /// `docs/privacy-policy.md`. Live since 2026-09-08 — verified 200 with
-    /// the full policy text and its stylesheet. The same URL goes in the
+    /// `docs/privacy-policy.md`. Live since 2026-09-08; moved from
+    /// `/soma/privacy/` with the repo rename on 2026-09-19 and verified 200
+    /// (the old path redirects here from the pranavski.github.io repo so
+    /// earlier builds keep a working link). The same URL goes in the
     /// App Store Connect metadata field; the in-app sheet carries the text
     /// as well, so review passes even if the page is briefly unreachable.
-    static let privacyPolicyURL = URL(string: "https://pranavski.github.io/soma/privacy/")
+    static let privacyPolicyURL = URL(string: "https://pranavski.github.io/noticed/privacy/")
 
     /// True once `privacyPolicyURL` resolves — it gates the sheet's "read
     /// this policy on the web" link, so a reviewer never taps a dead page.
     static let privacyPolicyIsHosted = true
+
+    /// The subscription's terms of use (EULA), linked from the paywall.
+    ///
+    /// Guideline 3.1.2 requires an auto-renewable subscription's paywall to
+    /// carry a **functional** link to the terms alongside the price and the
+    /// period. This points at Apple's standard EULA, which is the agreement
+    /// that actually governs the purchase as long as the App Store Connect
+    /// "License Agreement" field is left at Apple's standard — so the link
+    /// is honest, permanent, and cannot 404 the way a page of our own would
+    /// while the Pages site moves with the repo rename.
+    ///
+    /// If a custom EULA is ever filed in App Store Connect, this constant
+    /// and that field move together or the paywall starts describing an
+    /// agreement nobody signed.
+    static let termsOfUseURL = URL(
+        string: "https://www.apple.com/legal/internet-services/itunes/dev/stdeula/"
+    )
 
     /// Support contact, required alongside the privacy policy URL in ASC.
     /// The same address the markdown policy names.
